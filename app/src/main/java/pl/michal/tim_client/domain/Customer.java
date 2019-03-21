@@ -18,6 +18,7 @@ public class Customer {
         this.trainings = trainings;
     }
 
+    public Customer(){}
     public Long getId() {
         return id;
     }

@@ -8,16 +8,14 @@ public class Coach {
     public String name;
     public String surname;
     public String email;
-    public List<Training> acceptedTrainings;
-    public List<Training> proposedTrainings;
+    public List<Training> trainings;
 
-    public Coach(Long id, String name, String surname, String email, List<Training> acceptedTrainings, List<Training> proposedTrainings) {
+    public Coach(Long id, String name, String surname, String email, List<Training> trainings) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.acceptedTrainings = acceptedTrainings;
-        this.proposedTrainings = proposedTrainings;
+        this.trainings = trainings;
     }
 
     public Long getId() {
@@ -48,19 +46,13 @@ public class Coach {
         this.email = email;
     }
 
-    public List<Training> getAcceptedTrainings() {
-        return acceptedTrainings;
+    public List<Training> getTrainings() {
+        return trainings;
     }
 
-    public void setAcceptedTrainings(List<Training> acceptedTrainings) {
-        this.acceptedTrainings = acceptedTrainings;
+    public void setTrainings(List<Training> trainings) {
+        this.trainings = trainings;
     }
 
-    public List<Training> getProposedTrainings() {
-        return proposedTrainings;
-    }
 
-    public void setProposedTrainings(List<Training> proposedTrainings) {
-        this.proposedTrainings = proposedTrainings;
-    }
 }

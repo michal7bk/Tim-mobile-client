@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">Tim-client</string>
     <string name="action_settings">Settings</string>
+    <string name="action_new_training">New training !</string>
+    <string name="action_current_training">Check yours trainings</string>
+    <string name="action_your_profile">Check your profile</string>
+    <string name="email">Email</string>
+    <string name="username">Name</string>
+    <string name="surnamename">Surname</string>
+    <string name="roles">Roles</string>
+    <string name="plannedTrainings">Planed trainings</string>
+    <string name="completedTrainings">Completed trainings</string>
+    <string name="edit">Edit</string>
+    <string name="customer">Customer</string>
+    <string name="coach">Coach</string>
+    <string name="startTime">Start time</string>
+    <string name="endTime">End time</string>
 </resources>

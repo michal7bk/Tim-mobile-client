@@ -1,26 +1,35 @@
 package pl.michal.tim_client.domain;
 
-import java.time.LocalDateTime;
-
 public class Training {
-    public  Long id;
+    public Long id;
     public Customer customer;
     public Coach coach;
+    public String info;
 
-    public LocalDateTime startTime;
-    public LocalDateTime endTime;
+    public String startTime;
+    public String endTime;
 
-    public Training(Customer customer, Coach coach, LocalDateTime startTime, LocalDateTime endTime) {
+    public Training(Customer customer, Coach coach, String startTime, String endTime) {
         this.customer = customer;
         this.coach = coach;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
+    public Training() {
+    }
+
     public Long getId() {
         return id;
     }
 
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 
     public Customer getCustomer() {
         return customer;
@@ -38,19 +47,19 @@ public class Training {
         this.coach = coach;
     }
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 }
