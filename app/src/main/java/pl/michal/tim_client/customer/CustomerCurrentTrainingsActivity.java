@@ -27,8 +27,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pl.michal.tim_client.ObjRequestWithToken;
 import pl.michal.tim_client.R;
-import pl.michal.tim_client.RequestWithToken;
 import pl.michal.tim_client.domain.Coach;
 import pl.michal.tim_client.domain.Customer;
 import pl.michal.tim_client.domain.Training;
@@ -318,7 +318,7 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
         String url = Connection.url + "/customers/" + user.getId();
         RequestQueue queue = Volley.newRequestQueue(this);
         Log.i(TAG, "Making request on:" + url);
-        RequestWithToken getRequest = new RequestWithToken(Request.Method.GET, url, null,
+        ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
                 response -> {
                     Gson gson = new GsonBuilder()
                             .serializeNulls()

@@ -9,7 +9,7 @@ import pl.michal.tim_client.utils.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestWithToken extends JsonObjectRequest {
+public class ObjRequestWithToken extends JsonObjectRequest {
     @Override
     public Map<String, String> getHeaders() {
         final Map<String, String> headers = new HashMap<>();
@@ -18,13 +18,13 @@ public class RequestWithToken extends JsonObjectRequest {
         return headers;
     }
 
-    public RequestWithToken(int method, String url, @Nullable JSONObject jsonRequest, Response.Listener<JSONObject> listener, @Nullable Response.ErrorListener errorListener) {
+    public ObjRequestWithToken(int method, String url, @Nullable JSONObject jsonRequest, Response.Listener<JSONObject> listener, @Nullable Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
 
 
     }
 
-    public RequestWithToken(String url, @Nullable JSONObject jsonRequest, Response.Listener<JSONObject> listener, @Nullable Response.ErrorListener errorListener) {
+    public ObjRequestWithToken(String url, @Nullable JSONObject jsonRequest, Response.Listener<JSONObject> listener, @Nullable Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
     }
 }

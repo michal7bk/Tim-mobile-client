@@ -21,7 +21,7 @@ import com.google.gson.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pl.michal.tim_client.R;
-import pl.michal.tim_client.RequestWithToken;
+import pl.michal.tim_client.ObjRequestWithToken;
 import pl.michal.tim_client.coach.MenuCoachActivity;
 import pl.michal.tim_client.domain.Coach;
 import pl.michal.tim_client.domain.Customer;
@@ -30,10 +30,7 @@ import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.LocalDateTimeJsonConverter;
 
-import java.lang.reflect.Type;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,7 +108,7 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        RequestWithToken postRequest = new RequestWithToken(Request.Method.POST, url, jsonBody,
+        ObjRequestWithToken postRequest = new ObjRequestWithToken(Request.Method.POST, url, jsonBody,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -139,7 +136,7 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
         String url = Connection.url + "/customers/" + user.getId();
         RequestQueue queue = Volley.newRequestQueue(this);
         Log.i(TAG, "Making request on  : " + url);
-        RequestWithToken getRequest = new RequestWithToken(Request.Method.GET, url, null,
+        ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
                 response -> {
                     Gson gson = new GsonBuilder()
                             .setPrettyPrinting()
