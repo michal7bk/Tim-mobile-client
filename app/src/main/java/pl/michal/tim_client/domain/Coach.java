@@ -10,12 +10,16 @@ public class Coach {
     public String email;
     public List<Training> trainings;
 
-    public Coach(Long id, String name, String surname, String email, List<Training> trainings) {
+    public Coach(Long id, String name, String surname, String email) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.trainings = trainings;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname;
     }
 
     public Long getId() {

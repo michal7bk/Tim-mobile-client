@@ -9,11 +9,20 @@ public class Training {
     public String startTime;
     public String endTime;
 
-    public Training(Customer customer, Coach coach, String startTime, String endTime) {
+    public Training(Customer customer, Coach coach, String startTime, String endTime, String info) {
         this.customer = customer;
         this.coach = coach;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.info = info;
+    }
+    public Training(Long id ,Customer customer, Coach coach, String startTime, String endTime, String info) {
+        this.id = id;
+        this.customer = customer;
+        this.coach = coach;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.info = info;
     }
 
     public Training() {

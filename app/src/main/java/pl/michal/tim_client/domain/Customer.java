@@ -18,11 +18,17 @@ public class Customer {
         this.trainings = trainings;
     }
 
-    public Customer(){}
+    public Customer() {
+    }
+
     public Long getId() {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return name + " " + surname;
+    }
 
     public String getName() {
         return name;

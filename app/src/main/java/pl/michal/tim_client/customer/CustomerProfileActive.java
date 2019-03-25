@@ -14,7 +14,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.RequestWithToken;
@@ -22,7 +21,6 @@ import pl.michal.tim_client.domain.Customer;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +35,8 @@ public class CustomerProfileActive extends AppCompatActivity {
     TextView _completedTrainings;
     @BindView(R.id.input_plannedTrainings)
     TextView _plannedTrainings;
+    @BindView(R.id.input_uniqueCoaches)
+    TextView _uniqueCoaches;
     @BindView(R.id.input_email)
     TextView _email;
     @BindView(R.id.input_name)
@@ -49,6 +49,7 @@ public class CustomerProfileActive extends AppCompatActivity {
     Button _buttonEdit;
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,6 @@ public class CustomerProfileActive extends AppCompatActivity {
         setContentView(R.layout.customer_profile);
         ButterKnife.bind(this);
         matchCustomerWithUser(Connection.getUser());
-//        customer = matchCustomerWithUser(Connection.getUser());
     }
 
 
@@ -95,7 +95,6 @@ public class CustomerProfileActive extends AppCompatActivity {
                 response -> {
                     try {
                         _plannedTrainings.setText(response.getString("count"));
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -105,8 +104,24 @@ public class CustomerProfileActive extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Customer matchCustomerWithUser(User user) {
+    private void setNumberOfUniqueCoaches(Customer customer) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = Connection.url + "/customers/" + customer.getId() + "/unique-coaches";
+        Log.i(TAG, "Making request on: " + url);
+        RequestWithToken getRequest = new RequestWithToken(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        _uniqueCoaches.setText(response.getString("count"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> Log.d("Error.Response on  " + url, String.valueOf(error))
+        );
+        queue.add(getRequest);
+    }
+
+    private void matchCustomerWithUser(User user) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Connection.url + "/customers/" + user.getId();
         Log.i(TAG, "Making request on : " + url);
@@ -118,6 +133,7 @@ public class CustomerProfileActive extends AppCompatActivity {
                     setUpValue(customer);
                     setNumberOfPlannedTrainings(customer);
                     setNumberOfCompletedTrainings(customer);
+                    setNumberOfUniqueCoaches(customer);
                     Log.i(TAG, "Read customer : " + customer);
                 },
                 error -> Log.d("Error.Response", String.valueOf(error))
@@ -131,6 +147,5 @@ public class CustomerProfileActive extends AppCompatActivity {
             }
         };
         queue.add(getRequest);
-        return customer;
     }
 }

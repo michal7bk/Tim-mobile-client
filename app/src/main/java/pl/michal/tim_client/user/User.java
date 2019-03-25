@@ -1,7 +1,5 @@
 package pl.michal.tim_client.user;
 
-import pl.michal.tim_client.domain.Customer;
-
 public class User {
     private Long id;
     private String username;

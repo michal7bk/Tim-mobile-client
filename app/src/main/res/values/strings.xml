@@ -8,8 +8,9 @@
     <string name="username">Name</string>
     <string name="surnamename">Surname</string>
     <string name="roles">Roles</string>
-    <string name="plannedTrainings">Planed trainings</string>
-    <string name="completedTrainings">Completed trainings</string>
+    <string name="plannedTrainings">Planned:</string>
+    <string name="completedTrainings">Completed:</string>
+    <string name="UniqueCoaches">Coaches:</string>
     <string name="edit">Edit</string>
     <string name="customer">Customer</string>
     <string name="coach">Coach</string>

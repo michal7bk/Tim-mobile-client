@@ -19,11 +19,13 @@
         </activity>
 
         <activity android:name=".SignupActivity" android:theme="@style/AppTheme.Dark" />
-        <activity android:name=".coach.MenuCoachActivity" android:theme="@style/AppTheme.Dark" />
         <activity android:name=".customer.MenuCustomerActivity" android:theme="@style/AppTheme.Dark" />
         <activity android:name=".customer.CustomerCurrentTrainingsActivity" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".customer.CustomerNewTrainingsActive" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".customer.CustomerProfileActive" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".coach.MenuCoachActivity" android:theme="@style/AppTheme.Dark" />
+        <activity android:name=".coach.CoachProfileActive" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".coach.CoachTrainingsActivity" android:theme="@style/AppTheme.Dark"/>
     </application>
 
 </manifest>
