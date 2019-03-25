@@ -1,22 +1,25 @@
 package pl.michal.tim_client.domain;
 
+import java.time.LocalDateTime;
+
 public class Training {
     public Long id;
     public Customer customer;
     public Coach coach;
     public String info;
 
-    public String startTime;
-    public String endTime;
+    public LocalDateTime startTime;
+    public LocalDateTime endTime;
+    public boolean accepted;
 
-    public Training(Customer customer, Coach coach, String startTime, String endTime, String info) {
+    public Training(Customer customer, Coach coach, LocalDateTime startTime, LocalDateTime endTime, String info) {
         this.customer = customer;
         this.coach = coach;
         this.startTime = startTime;
         this.endTime = endTime;
         this.info = info;
     }
-    public Training(Long id ,Customer customer, Coach coach, String startTime, String endTime, String info) {
+    public Training(Long id ,Customer customer, Coach coach, LocalDateTime startTime, LocalDateTime endTime, String info) {
         this.id = id;
         this.customer = customer;
         this.coach = coach;
@@ -25,7 +28,25 @@ public class Training {
         this.info = info;
     }
 
+    public Training(Customer customer, Coach coach, LocalDateTime startTime, LocalDateTime endTime, String info, boolean accepted) {
+        this.id = id;
+        this.customer = customer;
+        this.coach = coach;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.info = info;
+        this.accepted =accepted;
+    }
+
     public Training() {
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 
     public Long getId() {
@@ -56,19 +77,19 @@ public class Training {
         this.coach = coach;
     }
 
-    public String getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 }

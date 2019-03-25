@@ -14,13 +14,16 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.RequestWithToken;
 import pl.michal.tim_client.domain.Customer;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
+import pl.michal.tim_client.utils.LocalDateTimeJsonConverter;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -121,15 +124,20 @@ public class CustomerProfileActive extends AppCompatActivity {
         queue.add(getRequest);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void matchCustomerWithUser(User user) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = Connection.url + "/customers/" + user.getId();
         Log.i(TAG, "Making request on : " + url);
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-                    Gson gson = new Gson();
-                    Log.i(TAG, String.valueOf(response));
+                    Gson gson = new GsonBuilder()
+                            .setPrettyPrinting()
+                            .serializeNulls()
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeJsonConverter())
+                            .create();
                     customer = gson.fromJson(String.valueOf(response), Customer.class);
+                    Log.i(TAG, String.valueOf(response));
                     setUpValue(customer);
                     setNumberOfPlannedTrainings(customer);
                     setNumberOfCompletedTrainings(customer);

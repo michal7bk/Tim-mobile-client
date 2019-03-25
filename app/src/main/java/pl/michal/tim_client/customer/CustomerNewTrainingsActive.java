@@ -17,7 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pl.michal.tim_client.R;
@@ -28,8 +28,12 @@ import pl.michal.tim_client.domain.Customer;
 import pl.michal.tim_client.domain.Training;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
+import pl.michal.tim_client.utils.LocalDateTimeJsonConverter;
 
+import java.lang.reflect.Type;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +90,7 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
 
             Coach coach = (Coach) _coachesSpinner.getSelectedItem();
             String info = _inputInfo.getText().toString();
-            requestProposeNewTraining(new Training(customer, coach, startDate.toString(), endDate.toString(), info));
+            requestProposeNewTraining(new Training(customer, coach, startDate, endDate, info));
         }
     }
 
@@ -137,7 +141,11 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
         Log.i(TAG, "Making request on  : " + url);
         RequestWithToken getRequest = new RequestWithToken(Request.Method.GET, url, null,
                 response -> {
-                    Gson gson = new Gson();
+                    Gson gson = new GsonBuilder()
+                            .setPrettyPrinting()
+                            .serializeNulls()
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeJsonConverter())
+                            .create();
                     Log.i(TAG, String.valueOf(response));
                     customer = gson.fromJson(String.valueOf(response), Customer.class);
 //                    setUpValue(customer);
