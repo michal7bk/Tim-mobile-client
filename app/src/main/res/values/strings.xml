@@ -11,9 +11,12 @@
     <string name="plannedTrainings">Planned:</string>
     <string name="completedTrainings">Completed:</string>
     <string name="UniqueCoaches">Coaches:</string>
+    <string name="UniqueCustomers">Customers:</string>
     <string name="edit">Edit</string>
     <string name="customer">Customer</string>
     <string name="coach">Coach</string>
     <string name="startTime">Start time</string>
     <string name="endTime">End time</string>
+    <string name="acceptedTrainings">Accepted:</string>
+    <string name="proposedTrainings">Proposed:</string>
 </resources>

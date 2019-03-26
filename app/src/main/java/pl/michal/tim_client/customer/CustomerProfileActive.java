@@ -137,7 +137,7 @@ public class CustomerProfileActive extends AppCompatActivity {
                             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeJsonConverter())
                             .create();
                     customer = gson.fromJson(String.valueOf(response), Customer.class);
-                    Log.i(TAG, String.valueOf(response));
+                    Log.i(TAG, "Read coach : " + response);
                     setUpValue(customer);
                     setNumberOfPlannedTrainings(customer);
                     setNumberOfCompletedTrainings(customer);
