@@ -27,7 +27,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pl.michal.tim_client.ObjRequestWithToken;
+import pl.michal.tim_client.utils.ObjRequestWithToken;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.domain.Coach;
 import pl.michal.tim_client.domain.Customer;
@@ -67,7 +67,7 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
         _tableLayout.setStretchAllColumns(true);
     }
 
-    public void startLoadData() {
+    private void startLoadData() {
         mProgressBar.setCancelable(false);
         mProgressBar.setMessage("Fetching Trainings..");
         mProgressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);

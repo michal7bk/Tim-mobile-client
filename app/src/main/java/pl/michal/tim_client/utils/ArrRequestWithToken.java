@@ -1,10 +1,9 @@
-package pl.michal.tim_client;
+package pl.michal.tim_client.utils;
 
 import android.support.annotation.Nullable;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import org.json.JSONArray;
-import pl.michal.tim_client.utils.Connection;
 
 import java.util.HashMap;
 import java.util.Map;

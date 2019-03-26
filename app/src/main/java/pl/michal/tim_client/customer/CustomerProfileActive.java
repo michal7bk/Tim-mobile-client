@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import pl.michal.tim_client.R;
-import pl.michal.tim_client.ObjRequestWithToken;
+import pl.michal.tim_client.utils.ObjRequestWithToken;
 import pl.michal.tim_client.domain.Customer;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;

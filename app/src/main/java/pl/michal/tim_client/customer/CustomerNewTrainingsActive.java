@@ -21,7 +21,7 @@ import com.google.gson.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pl.michal.tim_client.R;
-import pl.michal.tim_client.ObjRequestWithToken;
+import pl.michal.tim_client.utils.ObjRequestWithToken;
 import pl.michal.tim_client.coach.MenuCoachActivity;
 import pl.michal.tim_client.domain.Coach;
 import pl.michal.tim_client.domain.Customer;
