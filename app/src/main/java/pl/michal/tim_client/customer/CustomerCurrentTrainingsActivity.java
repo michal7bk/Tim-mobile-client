@@ -1,6 +1,7 @@
 package pl.michal.tim_client.customer;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -10,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -27,7 +27,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pl.michal.tim_client.utils.ObjRequestWithToken;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.domain.Coach;
 import pl.michal.tim_client.domain.Customer;
@@ -35,6 +34,7 @@ import pl.michal.tim_client.domain.Training;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.LocalDateTimeJsonConverter;
+import pl.michal.tim_client.utils.ObjRequestWithToken;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -96,7 +96,8 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
                             LocalDateTime endTime = LocalDateTime.parse(training.getString("endTime"));
                             String info = training.getString("info");
                             boolean accepted = training.getBoolean("accepted");
-                            result.add(new Training(customerResult, coachResult, startTime, endTime, info, accepted));
+                            Long id = training.getLong("id");
+                            result.add(new Training(id, customerResult, coachResult, startTime, endTime, info, accepted));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -133,7 +134,7 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm");
         int rows = trainings.size();
         getSupportActionBar().setTitle("Your trainings (" + rows + ")");
-        TextView textSpacer = null;
+        TextView textSpacer;
 
         _tableLayout.removeAllViews();
 
@@ -276,15 +277,16 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
             tr.addView(tv2);
             tr.addView(layCustomer);
             tr.addView(layAmounts);
-
+            tr.setTag(i);
             if (i > -1) {
 
-                tr.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        TableRow tr = (TableRow) v;
-                        //do whatever action is needed
-
-                    }
+                tr.setOnClickListener(v -> {
+                    TableRow tr1 = (TableRow) v;
+                    Training training = trainings.get((Integer) tr1.getTag());
+                    Long idTraining = training.getId();
+                    Intent intent = new Intent(getApplicationContext(), CustomerProposeNewDateActive.class);
+                    intent.putExtra("idTraining", idTraining);
+                    startActivity(intent);
                 });
 
             }
