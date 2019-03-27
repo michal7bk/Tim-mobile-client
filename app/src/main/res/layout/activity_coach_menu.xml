@@ -41,31 +41,22 @@
 
 
     <TableRow
-            android:id="@+id/row_4"
+            android:id="@+id/coach_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="2dp">
 
-        <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:layout_weight="1"
-                android:background="#ed8404"
-                android:gravity="center"
-                android:padding="32dp"
-                android:text="Row 4\nColumn 1"
-                android:textColor="#fff" />
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
+                android:layout_weight="1"
                 android:background="#ed8404"
                 android:gravity="center"
                 android:padding="32dp"
-                android:text="Row 4\nColumn 2"
+                android:text="@string/checkCalendar"
                 android:textColor="#fff" />
+
 
     </TableRow>
 
@@ -86,6 +77,14 @@
                 android:textColor="#fff" />
 
     </TableRow>
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_CoachLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/logout"
+            android:layout_margin="16dp" />
 
 
 </TableLayout>

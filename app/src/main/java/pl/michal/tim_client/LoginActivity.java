@@ -22,6 +22,7 @@ import pl.michal.tim_client.coach.MenuCoachActivity;
 import pl.michal.tim_client.customer.MenuCustomerActivity;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
+import pl.michal.tim_client.utils.ObjRequestWithToken;
 
 import java.io.UnsupportedEncodingException;
 
@@ -172,6 +173,8 @@ public class LoginActivity extends AppCompatActivity {
                                 user.setId(response.getLong("id"));
                                 user.setActive(true);
                             }
+                            //TODO check it !
+                            setOnline(user);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -197,6 +200,26 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return user;
+    }
+
+    private void setOnline(User user) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = Connection.url + "/users/set-online";
+        Log.i(TAG, "Making request on :" + url);
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("roles", user.getRoles());
+            jsonBody.put("name", user.getUsername());
+            jsonBody.put("id", user.getId());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ObjRequestWithToken putRequest = new ObjRequestWithToken(Request.Method.PUT, url, jsonBody,
+                response -> {
+                    Log.d("Set online : ", response.toString());
+                },
+                error -> Log.e("Error. Response from setting online : ", String.valueOf(error)));
+        queue.add(putRequest);
     }
 }
 

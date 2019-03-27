@@ -19,4 +19,6 @@
     <string name="endTime">End time</string>
     <string name="acceptedTrainings">Accepted:</string>
     <string name="proposedTrainings">Proposed:</string>
+    <string name="checkCalendar">Check your calendar</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

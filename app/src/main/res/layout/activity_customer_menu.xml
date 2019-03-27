@@ -106,6 +106,17 @@
 
     </TableRow>
 
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btn_CustomerLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/logout"
+            android:layout_margin="16dp" />
+
+
+    <!--//TODO clean it ?-->
     <!--<LinearLayout>-->
 
         <!--<TextView-->
