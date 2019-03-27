@@ -28,7 +28,7 @@ public class Training {
         this.info = info;
     }
 
-    public Training(Customer customer, Coach coach, LocalDateTime startTime, LocalDateTime endTime, String info, boolean accepted) {
+    public Training(Long id,Customer customer, Coach coach, LocalDateTime startTime, LocalDateTime endTime, String info, boolean accepted) {
         this.id = id;
         this.customer = customer;
         this.coach = coach;

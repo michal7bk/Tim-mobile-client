@@ -23,6 +23,9 @@ public class MenuCustomerActivity extends AppCompatActivity {
     @BindView(R.id.customer_profile)
     TableRow _customerProfile;
 
+    @BindView(R.id.customer_find_coach)
+    TableRow _findCoach;
+
     @BindView(R.id.btn_CustomerLogout)
     FloatingActionButton _logout;
 
@@ -34,6 +37,7 @@ public class MenuCustomerActivity extends AppCompatActivity {
         _newTraining.setOnClickListener(x -> newTrainingClick());
         _curentTrainings.setOnClickListener(x -> currentTrainingsClick());
         _customerProfile.setOnClickListener(x -> customerProfileClick());
+        _findCoach.setOnClickListener(x -> findCoach());
         _logout.setOnClickListener(x -> logout());
     }
 
@@ -47,14 +51,17 @@ public class MenuCustomerActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     private void customerProfileClick() {
         Intent intent = new Intent(getApplicationContext(), CustomerProfileActive.class);
         startActivity(intent);
     }
 
+    private void findCoach() {
+        Intent intent = new Intent(getApplicationContext(), CustomerFindCoachActivity.class);
+        startActivity(intent);
+    }
+
     private void logout() {
-        //TODO CHECK IF ID IS OK ?!
         LogoutUtils.setOffline(Connection.getUser(), this);
         LogoutUtils.cleanUser();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
