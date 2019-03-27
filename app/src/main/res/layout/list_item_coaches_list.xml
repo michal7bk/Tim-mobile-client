@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp"
+                tools:context=".coach.CoachTrainingsActivity" >
+
+    <TextView
+            android:id="@+id/textName_coachesList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+
+
+    <Button
+            android:id="@+id/btnContact"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="#99CC"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:textColor="#FFFFFF" />
+
+
+</RelativeLayout>
