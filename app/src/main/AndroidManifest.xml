@@ -23,6 +23,8 @@
         <activity android:name=".customer.CustomerCurrentTrainingsActivity" />
         <activity android:name=".customer.CustomerNewTrainingsActive" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".customer.CustomerProfileActive" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".customer.CustomerFindCoachActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".customer.CustomerProposeNewDateActive" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".coach.MenuCoachActivity" android:theme="@style/AppTheme.Dark" />
         <activity android:name=".coach.CoachProfileActivity" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".coach.CoachTrainingsActivity" android:theme="@style/AppTheme.Dark"/>
