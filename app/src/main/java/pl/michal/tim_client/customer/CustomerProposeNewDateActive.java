@@ -65,11 +65,13 @@ public class CustomerProposeNewDateActive extends AppCompatActivity {
 
         dialogView.findViewById(R.id.date_time_set).setOnClickListener(view -> {
 
-            TimePicker timePicker = dialogView.findViewById(R.id.time_picker);
             DatePicker datePicker = dialogView.findViewById(R.id.date_picker);
+            int monthNumber = (datePicker.getMonth() + 1) % 12;
+
+            TimePicker timePicker = dialogView.findViewById(R.id.time_picker);
 
             LocalDateTime localDateTime = LocalDateTime.of(
-                    datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
+                    datePicker.getYear(), monthNumber, datePicker.getDayOfMonth(),
                     timePicker.getHour(), timePicker.getMinute());
             alertDialog.dismiss();
             if (isStartDate) {
@@ -86,35 +88,51 @@ public class CustomerProposeNewDateActive extends AppCompatActivity {
     }
 
     private void requestProposeNewDateTraining(Long trainingId) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = Connection.url + "/trainings/" + trainingId + "/propose";
-        Log.i(TAG, "Making request on propose new Training date :  " + url);
-        JSONObject newDateJson = new JSONObject();
-        try {
-            newDateJson.put("startTime", startDate);
-            newDateJson.put("endTime", endDate);
-            Log.i(TAG, "Request Body to update date:  " + newDateJson);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        //TODO valid date eg. if enttime is before starttime
-        ObjRequestWithToken postRequest = new ObjRequestWithToken(Request.Method.PUT, url, newDateJson,
-                response -> {
-                    Toast.makeText(CustomerProposeNewDateActive.this, "New date for training was proposed", Toast.LENGTH_LONG).show();
-                    Log.i(TAG, "New date for training was proposed " + response);
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                },
-                error -> {
-                    if (error.networkResponse.statusCode == 409) {
-                        Toast.makeText(CustomerProposeNewDateActive.this, "Your propopsed new training date conflict with existing coach training," +
-                                " please change date", Toast.LENGTH_LONG).show();
+        if (!validate()) {
+            Toast.makeText(getBaseContext(), "Data isn't valid", Toast.LENGTH_LONG).show();
+        } else {
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = Connection.url + "/trainings/" + trainingId + "/propose";
+            Log.i(TAG, "Making request on propose new Training date :  " + url);
+            JSONObject newDateJson = new JSONObject();
+            try {
+                newDateJson.put("startTime", startDate);
+                newDateJson.put("endTime", endDate);
+                Log.i(TAG, "Request Body to update date:  " + newDateJson);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            ObjRequestWithToken postRequest = new ObjRequestWithToken(Request.Method.PUT, url, newDateJson,
+                    response -> {
+                        Toast.makeText(CustomerProposeNewDateActive.this, "New date for training was proposed", Toast.LENGTH_LONG).show();
+                        Log.i(TAG, "New date for training was proposed " + response);
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    },
+                    error -> {
+                        if (error.networkResponse.statusCode == 409) {
+                            Toast.makeText(CustomerProposeNewDateActive.this, "Your propopsed new training date conflict with existing coach training," +
+                                    " please change date", Toast.LENGTH_LONG).show();
+                        }
+                        Log.d(TAG + "Error.Response on " + url, String.valueOf(error));
                     }
-                    Log.d(TAG + "Error.Response on " + url, String.valueOf(error));
-                }
-        );
-        queue.add(postRequest);
+            );
+            queue.add(postRequest);
+        }
+    }
+
+    private boolean validate() {
+        boolean valid = true;
+
+        if (endDate.isBefore(startDate)) {
+            _textStartDate.setError("End time must be after start time ");
+            Toast.makeText(this, "End time must be after start time", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+
+        return valid;
     }
 
 

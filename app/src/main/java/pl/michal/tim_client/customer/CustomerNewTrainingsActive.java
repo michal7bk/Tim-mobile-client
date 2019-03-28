@@ -163,8 +163,9 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
             DatePicker datePicker = dialogView.findViewById(R.id.date_picker);
             TimePicker timePicker = dialogView.findViewById(R.id.time_picker);
 
+            int monthNumber = (datePicker.getMonth() + 1)% 12;
             LocalDateTime localDateTime = LocalDateTime.of(
-                    datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(),
+                    datePicker.getYear(), monthNumber, datePicker.getDayOfMonth(),
                     timePicker.getHour(), timePicker.getMinute());
             alertDialog.dismiss();
 
