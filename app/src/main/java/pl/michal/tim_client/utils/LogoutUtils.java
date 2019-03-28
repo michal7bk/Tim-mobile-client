@@ -25,7 +25,7 @@ public class LogoutUtils {
         }
         ObjRequestWithToken putRequest = new ObjRequestWithToken(Request.Method.PUT, url, jsonBody,
                 response -> {
-                    Log.d("Set offline : ", response.toString());
+                    Log.d("LogoutUtils", ": status set offline ");
                 },
                 error -> Log.e("Error. Response from setting offline : ", String.valueOf(error)));
         queue.add(putRequest);

@@ -216,7 +216,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         ObjRequestWithToken putRequest = new ObjRequestWithToken(Request.Method.PUT, url, jsonBody,
                 response -> {
-                    Log.d("Set online : ", response.toString());
+                    Log.d(TAG,"Set online ");
                 },
                 error -> Log.e("Error. Response from setting online : ", String.valueOf(error)));
         queue.add(putRequest);
