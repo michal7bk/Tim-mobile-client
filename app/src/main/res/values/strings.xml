@@ -22,5 +22,6 @@
     <string name="checkCalendar">Check your calendar</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="discovery_trainer">Discovery coaches and ask for contact</string>
-    <string name="logo">personal-trainer Tim</string>
+    <string name="logo_coach">personal-trainer Tim You are logged in as coach</string>
+    <string name="logo_customer">personal-trainer Tim You are logged in as customer</string>
 </resources>

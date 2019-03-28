@@ -218,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
                 response -> {
                     Log.d(TAG,"Set online ");
                 },
-                error -> Log.e("Error. Response from setting online : ", String.valueOf(error)));
+                error -> Log.e(TAG,"Error. Response from setting online."));
         queue.add(putRequest);
     }
 }
