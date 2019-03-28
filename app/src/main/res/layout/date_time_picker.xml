@@ -10,16 +10,12 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:calendarViewShown="true"
-            android:scaleY="0.70"
-            android:scaleX="0.70"
             android:layout_weight="4" android:spinnersShown="false"/>
 
 
     <TimePicker
             android:id="@+id/time_picker"
             android:layout_weight="6"
-            android:scaleY="0.70"
-            android:scaleX="0.70"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:transitionGroup="false"/>

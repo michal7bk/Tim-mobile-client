@@ -114,7 +114,7 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Toast.makeText(CustomerNewTrainingsActive.this, "New training was proposed", Toast.LENGTH_LONG).show();
                         Log.i(TAG, "New training was proposed " + response );
-                        Intent intent = new Intent(getApplicationContext(), MenuCoachActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MenuCustomerActivity.class);
                         startActivity(intent);
                     }
                 },
