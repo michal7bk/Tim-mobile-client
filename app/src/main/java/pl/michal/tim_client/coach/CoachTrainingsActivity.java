@@ -6,7 +6,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -84,8 +83,7 @@ public class CoachTrainingsActivity extends AppCompatActivity {
         listView.setItemsCanFocus(false);
         listView.setAdapter(trainingsArrayAdapter);
         listView.setOnItemClickListener(
-                (parent, view, position, id) -> Toast.makeText(
-                        CoachTrainingsActivity.this, "List Item Clicked: " + position, Toast.LENGTH_LONG).show());
+                (parent, view, position, id) -> Log.i(TAG, "List Item Clicked: " + position));
 
     }
 

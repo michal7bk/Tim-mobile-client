@@ -56,7 +56,7 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
     @BindView(R.id.text_endDate)
     TextView _textEndDate;
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private LocalDateTime startDate = LocalDateTime.now().plusHours(23);
     private LocalDateTime endDate = LocalDateTime.now().plusHours(24);
 
@@ -109,24 +109,18 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
             e.printStackTrace();
         }
         ObjRequestWithToken postRequest = new ObjRequestWithToken(Request.Method.POST, url, jsonBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(CustomerNewTrainingsActive.this, "New training was proposed", Toast.LENGTH_LONG).show();
-                        Log.i(TAG, "New training was proposed " + response );
-                        Intent intent = new Intent(getApplicationContext(), MenuCustomerActivity.class);
-                        startActivity(intent);
-                    }
+                response -> {
+                    Toast.makeText(CustomerNewTrainingsActive.this, R.string.ToastTrainingProposed, Toast.LENGTH_LONG).show();
+                    Log.i(TAG, "New training was proposed " + response );
+                    Intent intent = new Intent(getApplicationContext(), MenuCustomerActivity.class);
+                    startActivity(intent);
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (error.networkResponse.statusCode == 409) {
-                            Toast.makeText(CustomerNewTrainingsActive.this, "Your propopsed training conflict with existing coach training," +
-                                    " please change date", Toast.LENGTH_LONG).show();
-                        }
-                        Log.d(TAG + "Error.Response on " + url, String.valueOf(error));
+                error -> {
+                    if (error.networkResponse.statusCode == 409) {
+                        Toast.makeText(CustomerNewTrainingsActive.this, getString(R.string.ToastTrainingConflict) +
+                                " please change date", Toast.LENGTH_LONG).show();
                     }
+                    Log.d(TAG + "Error.Response on " + url, String.valueOf(error));
                 }
         );
         queue.add(postRequest);
@@ -193,13 +187,13 @@ public class CustomerNewTrainingsActive extends AppCompatActivity {
         boolean valid = true;
         String info = _inputInfo.getText().toString();
         if (info.length() < 3) {
-            _inputInfo.setError("Please give some details about training.");
+            _inputInfo.setError(getString(R.string.ErrorEmptyDetails));
             valid = false;
         }
 
         if (endDate.isBefore(startDate)){
-            _textStartDate.setError("End time must be after start time");
-            Toast.makeText(this,"End time must be after start time",Toast.LENGTH_SHORT).show();
+            _textStartDate.setError(getString(R.string.ErrorEndAfterStart));
+            Toast.makeText(this, R.string.ToastEndAfterBefore,Toast.LENGTH_SHORT).show();
             valid = false;
         }
 

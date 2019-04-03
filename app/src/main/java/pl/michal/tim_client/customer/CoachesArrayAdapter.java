@@ -56,7 +56,7 @@ public class CoachesArrayAdapter extends ArrayAdapter<Coach> {
 
         coachWrapper.contact.setOnClickListener(v -> {
             askForContact(coach);
-            Toast.makeText(context,"Your ask was send, wait for answer from coach" , Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.ToastAskForContact , Toast.LENGTH_LONG).show();
         });
         return item;
     }

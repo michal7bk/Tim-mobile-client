@@ -133,7 +133,7 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm");
         int rows = trainings.size();
-        getSupportActionBar().setTitle("Your trainings (" + rows + ")");
+        getSupportActionBar().setTitle("Trainings (" + rows + ") pick to change date");
         TextView textSpacer;
 
         _tableLayout.removeAllViews();

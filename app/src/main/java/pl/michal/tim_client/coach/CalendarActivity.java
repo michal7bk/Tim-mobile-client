@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -18,8 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pl.michal.tim_client.R;
+import pl.michal.tim_client.coach.calendar.CalendarAdapter;
 import pl.michal.tim_client.coach.calendar.EventsCollection;
-import pl.michal.tim_client.coach.calendar.HwAdapter;
 import pl.michal.tim_client.domain.Coach;
 import pl.michal.tim_client.domain.Training;
 import pl.michal.tim_client.user.User;
@@ -38,13 +37,13 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class CalendarActivity extends AppCompatActivity {
     private final String TAG = "CalendarActivity";
-    Coach coach;
+    private Coach coach;
     private List<Training> allTrainings = new ArrayList<>();
     public GregorianCalendar cal_month, cal_month_copy;
-    private HwAdapter hwAdapter;
+    private CalendarAdapter calendarAdapter;
     private TextView tv_month;
-    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +127,7 @@ public class CalendarActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Your calendar");
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_month_copy = (GregorianCalendar) cal_month.clone();
-        hwAdapter = new HwAdapter(this, cal_month, EventsCollection.date_collection_arr);
+        calendarAdapter = new CalendarAdapter(this, cal_month, EventsCollection.date_collection_arr);
 
         tv_month = findViewById(R.id.tv_month);
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
@@ -138,7 +137,6 @@ public class CalendarActivity extends AppCompatActivity {
         previous.setOnClickListener(v -> {
             if (cal_month.get(GregorianCalendar.MONTH) == Calendar.MAY && cal_month.get(GregorianCalendar.YEAR) == 2017) {
                 //cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
-                Toast.makeText(CalendarActivity.this, "Event Detail is available for current session only.", Toast.LENGTH_SHORT).show();
             } else {
                 setPreviousMonth();
                 refreshCalendar();
@@ -150,18 +148,17 @@ public class CalendarActivity extends AppCompatActivity {
         next.setOnClickListener(v -> {
             if (cal_month.get(GregorianCalendar.MONTH) == Calendar.JUNE && cal_month.get(GregorianCalendar.YEAR) == 2018) {
                 //cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
-                Toast.makeText(CalendarActivity.this, "Event Detail is available for current session only.", Toast.LENGTH_SHORT).show();
             } else {
                 setNextMonth();
                 refreshCalendar();
             }
         });
         GridView gridview = findViewById(R.id.gv_calendar);
-        gridview.setAdapter(hwAdapter);
+        gridview.setAdapter(calendarAdapter);
         gridview.setOnItemClickListener(
                 (parent, v, position, id) -> {
-                    String selectedGridDate = HwAdapter.day_string.get(position);
-                    ((HwAdapter) parent.getAdapter()).getPositionList(selectedGridDate, CalendarActivity.this);
+                    String selectedGridDate = CalendarAdapter.day_string.get(position);
+                    ((CalendarAdapter) parent.getAdapter()).getPositionList(selectedGridDate, CalendarActivity.this);
                 });
     }
 
@@ -184,8 +181,8 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void refreshCalendar() {
-        hwAdapter.refreshDays();
-        hwAdapter.notifyDataSetChanged();
+        calendarAdapter.refreshDays();
+        calendarAdapter.notifyDataSetChanged();
         tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
     }
 

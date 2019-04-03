@@ -23,6 +23,8 @@ import pl.michal.tim_client.utils.ObjRequestWithToken;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static pl.michal.tim_client.R.string.ErrorEndAfterStart;
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class CustomerProposeNewDateActive extends AppCompatActivity {
 
@@ -49,7 +51,7 @@ public class CustomerProposeNewDateActive extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_new_date);
         ButterKnife.bind(this);
-        setTitle("Propose new Data for your training");
+        setTitle(getString(R.string.TittleProposeTraining));
         Intent intent = getIntent();
         Long id = intent.getLongExtra("idTraining", 0);
         _proposeNewDate.setOnClickListener(view -> requestProposeNewDateTraining(id));
@@ -89,7 +91,7 @@ public class CustomerProposeNewDateActive extends AppCompatActivity {
 
     private void requestProposeNewDateTraining(Long trainingId) {
         if (!validate()) {
-            Toast.makeText(getBaseContext(), "Data isn't valid", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), R.string.ToastDataNotValidate, Toast.LENGTH_LONG).show();
         } else {
 
             RequestQueue queue = Volley.newRequestQueue(this);
@@ -105,7 +107,7 @@ public class CustomerProposeNewDateActive extends AppCompatActivity {
             }
             ObjRequestWithToken postRequest = new ObjRequestWithToken(Request.Method.PUT, url, newDateJson,
                     response -> {
-                        Toast.makeText(CustomerProposeNewDateActive.this, "New date for training was proposed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CustomerProposeNewDateActive.this, R.string.ToastNewDataProposed, Toast.LENGTH_LONG).show();
                         Log.i(TAG, "New date for training was proposed " + response);
                         Intent intent = new Intent();
                         setResult(RESULT_OK, intent);
@@ -113,8 +115,7 @@ public class CustomerProposeNewDateActive extends AppCompatActivity {
                     },
                     error -> {
                         if (error.networkResponse.statusCode == 409) {
-                            Toast.makeText(CustomerProposeNewDateActive.this, "Your propopsed new training date conflict with existing coach training," +
-                                    " please change date", Toast.LENGTH_LONG).show();
+                            Toast.makeText(CustomerProposeNewDateActive.this, R.string.ToastTrainingConflict, Toast.LENGTH_LONG).show();
                         }
                         Log.d(TAG + "Error.Response on " + url, String.valueOf(error));
                     }
@@ -127,11 +128,10 @@ public class CustomerProposeNewDateActive extends AppCompatActivity {
         boolean valid = true;
 
         if (endDate.isBefore(startDate)) {
-            _textStartDate.setError("End time must be after start time ");
-            Toast.makeText(this, "End time must be after start time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.ToastEndAfterBefore, Toast.LENGTH_SHORT).show();
+            _textStartDate.setError(getString(R.string.ErrorEndAfterStart));
             valid = false;
         }
-
         return valid;
     }
 

@@ -1,5 +1,6 @@
 package pl.michal.tim_client.coach;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
@@ -44,6 +45,7 @@ public class CoachesTrainingArrayAdapter extends ArrayAdapter<Training> {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm");
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View item = convertView;
@@ -65,7 +67,7 @@ public class CoachesTrainingArrayAdapter extends ArrayAdapter<Training> {
         trainingWrapper.customer.setText(training.getCustomer().toString());
         trainingWrapper.info.setText(training.getInfo());
         trainingWrapper.time.setText("from : " + training.getStartTime().format(formatter) + " to: " + training.getEndTime().format(formatter));
-        Log.i(TAG,training.toString());
+        Log.i(TAG, training.toString());
         if (training.isAccepted()) {
             trainingWrapper.edit.setText(CANCEL);
         } else if (!training.isAccepted()) {
@@ -75,16 +77,16 @@ public class CoachesTrainingArrayAdapter extends ArrayAdapter<Training> {
         trainingWrapper.edit.setOnClickListener(v -> {
             if (training.isAccepted()) {
                 cancelTraining(training.id);
-                Toast.makeText(context, "Your training was canceled ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.ToastTrainingCanceled, Toast.LENGTH_SHORT).show();
                 trainingWrapper.edit.setText(CANCEL);
-            } else if (!training.isAccepted()){
+            } else if (!training.isAccepted()) {
                 acceptTraining(training.id);
-                Toast.makeText(context, "Your training was accepted ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.ToastTrainingAccepted, Toast.LENGTH_SHORT).show();
                 trainingWrapper.edit.setText(ACCEPT);
             }
         });
         trainingWrapper.delete.setOnClickListener(v -> {
-            Toast.makeText(context, "Your training will be deleted ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.ToastTrainingDeleted, Toast.LENGTH_SHORT).show();
             deleteTraining(training);
             trainings.remove(training);
         });

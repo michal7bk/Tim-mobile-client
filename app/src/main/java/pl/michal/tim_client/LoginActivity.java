@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(getBaseContext(), "New account created ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), R.string.ToastNewAccount, Toast.LENGTH_LONG).show();
                 this.finish();
             }
         }
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Incorrect credenstial please sign up", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), R.string.ToastIncorrectCredentials, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
         startActivityForResult(intent, REQUEST_SIGNUP);
         _loginButton.setEnabled(true);
@@ -136,14 +136,14 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (username.isEmpty()) {
-            _usernameText.setError("enter a valid username");
+            _usernameText.setError(getString(R.string.ErrorValidUsername));
             valid = false;
         } else {
             _usernameText.setError(null);
         }
 
         if (password.isEmpty()) {
-            _passwordText.setError("Password can not be empty");
+            _passwordText.setError(getString(R.string.ErrorValidPassword));
             valid = false;
         } else {
             _passwordText.setError(null);
@@ -173,7 +173,6 @@ public class LoginActivity extends AppCompatActivity {
                                 user.setId(response.getLong("id"));
                                 user.setActive(true);
                             }
-                            //TODO check it !
                             setOnline(user);
                         } catch (JSONException e) {
                             e.printStackTrace();

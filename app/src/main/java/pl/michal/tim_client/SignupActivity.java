@@ -98,7 +98,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), R.string.LoginFailed, Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
@@ -111,21 +111,21 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 characters");
+            _nameText.setError(getString(R.string.ErrorValidUsername));
             valid = false;
         } else {
             _nameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            _emailText.setError(getString(R.string.ErrorValidEmail));
             valid = false;
         } else {
             _emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4) {
-            _passwordText.setError("at lest 4 characters ");
+            _passwordText.setError(getString(R.string.ErrorValidPassword));
             valid = false;
         } else {
             _passwordText.setError(null);
@@ -179,9 +179,7 @@ public class SignupActivity extends AppCompatActivity {
     public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            Toast.makeText(parent.getContext(),
-                    "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
-                    Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "OnItemSelectedListiner" + parent.getItemAtPosition(pos).toString());
         }
 
         @Override

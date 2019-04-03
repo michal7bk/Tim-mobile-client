@@ -7,7 +7,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -79,8 +78,7 @@ public class CustomerFindCoachActivity extends AppCompatActivity {
         listView.setAdapter(coachesArrayAdapter);
         listView.setItemsCanFocus(false);
         listView.setOnItemClickListener(
-                (parent, view, position, id) -> Toast.makeText(
-                        CustomerFindCoachActivity.this, "List Item Clicked: " + position, Toast.LENGTH_LONG).show());
+                (parent, view, position, id) -> Log.i(TAG, "List Item Clicked: " + position));
     }
 
 

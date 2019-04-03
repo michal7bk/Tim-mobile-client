@@ -44,7 +44,7 @@
             android:background="#99CC"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="Delete"
+            android:text="@string/Delete"
             android:textColor="#FFFFFF" />
 
     <TextView

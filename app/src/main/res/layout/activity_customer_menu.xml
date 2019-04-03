@@ -17,7 +17,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="32dp"
-                android:text="@string/action_new_training"
+                android:text="@string/ActionNewTraining"
                 android:textColor="#fff" />
     </TableRow>
 
@@ -34,7 +34,7 @@
                 android:background="#ed8404"
                 android:gravity="center"
                 android:padding="32dp"
-                android:text="@string/action_current_training"
+                android:text="@string/ActionCurrentTraining"
                 android:textColor="#fff" />
 
     </TableRow>
@@ -53,7 +53,7 @@
                 android:background="#ed8404"
                 android:gravity="center"
                 android:padding="32dp"
-                android:text="@string/action_your_profile"
+                android:text="@string/ActionYourProfile"
                 android:textColor="#fff" />
 
 
@@ -73,7 +73,7 @@
                 android:background="#ed8404"
                 android:gravity="center"
                 android:padding="32dp"
-                android:text="@string/discovery_trainer"
+                android:text="@string/ActivityDiscoveryTrainer"
                 android:textColor="#fff" />
 
     </TableRow>
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="4dp"
-                android:text="@string/logo_customer"
+                android:text="@string/LogoCustomer"
                 android:textColor="#666"
                 android:textSize="33sp"
                 android:textStyle="bold" />

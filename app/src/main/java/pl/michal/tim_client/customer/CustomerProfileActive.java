@@ -1,5 +1,6 @@
 package pl.michal.tim_client.customer;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -63,13 +64,14 @@ public class CustomerProfileActive extends AppCompatActivity {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void setUpValue(Customer customer) {
 
         _nameWithSurname.setText(customer.getName() + " " + customer.getSurname());
         _email.setText(customer.getEmail());
         _name.setText(customer.getName());
         _surname.setText(customer.getSurname());
-        _roles.setText("Customer");
+        _roles.setText(R.string.Customer);
     }
 
     private void setNumberOfCompletedTrainings(Customer customer) {

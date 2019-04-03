@@ -20,7 +20,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
                 android:padding="12dp"
-                android:text="Set Start Time"/>
+                android:text="@string/ActivityStartTime"/>
 
         <TextView android:id="@+id/text_startDate"
                   android:layout_width="fill_parent"
@@ -37,7 +37,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
                 android:padding="12dp"
-                android:text="Set End Time"/>
+                android:text="@string/ActivitySenEnd"/>
 
         <TextView android:id="@+id/text_endDate"
                   android:layout_width="fill_parent"
@@ -55,7 +55,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="24dp"
                 android:padding="12dp"
-                android:text="Propose new date"/>
+                android:text="@string/ActivityProposeNewDate"/>
 
 
 

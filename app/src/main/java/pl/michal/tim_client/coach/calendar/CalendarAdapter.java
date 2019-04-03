@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class HwAdapter extends BaseAdapter {
+public class CalendarAdapter extends BaseAdapter {
     private Activity context;
 
     private java.util.Calendar month;
@@ -50,9 +50,9 @@ public class HwAdapter extends BaseAdapter {
     private ListView listTeachers;
     private ArrayList<DialogPojo> alCustom= new ArrayList<>();
 
-    public HwAdapter(Activity context, GregorianCalendar monthCalendar,ArrayList<EventsCollection> date_collection_arr) {
+    public CalendarAdapter(Activity context, GregorianCalendar monthCalendar, ArrayList<EventsCollection> date_collection_arr) {
         this.date_collection_arr=date_collection_arr;
-        HwAdapter.day_string = new ArrayList<>();
+        CalendarAdapter.day_string = new ArrayList<>();
         Locale.setDefault(Locale.US);
         month = monthCalendar;
         selectedDate = (GregorianCalendar) monthCalendar.clone();
