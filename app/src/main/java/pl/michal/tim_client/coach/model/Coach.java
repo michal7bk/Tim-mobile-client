@@ -1,4 +1,6 @@
-package pl.michal.tim_client.domain;
+package pl.michal.tim_client.coach.model;
+
+import pl.michal.tim_client.domain.Training;
 
 import java.util.List;
 

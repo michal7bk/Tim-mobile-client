@@ -19,7 +19,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.utils.ObjRequestWithToken;
-import pl.michal.tim_client.domain.Customer;
+import pl.michal.tim_client.customer.model.Customer;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.LocalDateTimeJsonConverter;
@@ -32,7 +32,6 @@ public class CustomerProfileActive extends AppCompatActivity {
     private static final String TAG = "CustomerProfileActive";
     private Customer customer;
 
-    //TODO EDITTEXT maybe for update date
     @BindView(R.id.input_nameWithSurname)
     TextView _nameWithSurname;
     @BindView(R.id.input_completedTrainings)

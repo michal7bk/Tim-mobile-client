@@ -14,7 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import pl.michal.tim_client.R;
-import pl.michal.tim_client.domain.Coach;
+import pl.michal.tim_client.coach.model.Coach;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.ObjRequestWithToken;
 

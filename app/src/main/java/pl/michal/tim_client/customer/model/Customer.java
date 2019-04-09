@@ -1,4 +1,6 @@
-package pl.michal.tim_client.domain;
+package pl.michal.tim_client.customer.model;
+
+import pl.michal.tim_client.domain.Training;
 
 import java.util.List;
 

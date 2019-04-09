@@ -1,5 +1,8 @@
 package pl.michal.tim_client.domain;
 
+import pl.michal.tim_client.coach.model.Coach;
+import pl.michal.tim_client.customer.model.Customer;
+
 import java.time.LocalDateTime;
 
 public class Training {

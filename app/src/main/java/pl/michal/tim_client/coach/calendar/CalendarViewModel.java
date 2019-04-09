@@ -1,13 +1,14 @@
-package pl.michal.tim_client.coach;
+package pl.michal.tim_client.coach.calendar;
 
+import android.app.Activity;
+import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+import android.databinding.ObservableField;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -16,10 +17,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pl.michal.tim_client.R;
-import pl.michal.tim_client.coach.calendar.CalendarAdapter;
-import pl.michal.tim_client.coach.calendar.EventsCollection;
-import pl.michal.tim_client.domain.Coach;
+import pl.michal.tim_client.coach.model.Coach;
 import pl.michal.tim_client.domain.Training;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.ArrRequestWithToken;
@@ -35,39 +33,38 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
-public class CalendarActivity extends AppCompatActivity {
-    private final String TAG = "CalendarActivity";
+public class CalendarViewModel extends ViewModel {
+
+    private final String TAG = "CalendarViewModel";
     private Coach coach;
     private List<Training> allTrainings = new ArrayList<>();
     public GregorianCalendar cal_month, cal_month_copy;
     private CalendarAdapter calendarAdapter;
-    private TextView tv_month;
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    Context context;
+    ObservableField<String> tv_month = new ObservableField<>();
+    GridView gridview;
+    ImageButton previous;
+    ImageButton next;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calendar);
-        matchCoachWithUser(Connection.getUser());
-    }
 
-    private void getTrainings(Coach coach){
+    private void getTrainings(Coach coach) {
         String acceptedUrl = Connection.url + "/coaches/" + coach.getId() + "/accepted-trainings-list";
         Log.i(TAG, "Making request on :" + acceptedUrl);
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         ArrRequestWithToken getAccepted = new ArrRequestWithToken(Request.Method.GET, acceptedUrl, null,
-                    this::readTrainingsResponse,
-                    error -> Log.d("Error.Response when reading trainings: ", String.valueOf(error))
-            );
-            String proposedUrl = Connection.url + "/coaches/" + coach.getId() + "/proposed-trainings-list";
-            ArrRequestWithToken getProposed = new ArrRequestWithToken(Request.Method.GET, proposedUrl, null,
-                    this::readTrainingsResponse,
-                    error -> Log.d("Error.Response when reading trainings: ", String.valueOf(error))
-            );
-            queue.add(getAccepted);
-            queue.add(getProposed);
-        }
+                this::readTrainingsResponse,
+                error -> Log.d("Error.Response when reading trainings: ", String.valueOf(error))
+        );
+        String proposedUrl = Connection.url + "/coaches/" + coach.getId() + "/proposed-trainings-list";
+        ArrRequestWithToken getProposed = new ArrRequestWithToken(Request.Method.GET, proposedUrl, null,
+                this::readTrainingsResponse,
+                error -> Log.d("Error.Response when reading trainings: ", String.valueOf(error))
+        );
+        queue.add(getAccepted);
+        queue.add(getProposed);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void readTrainingsResponse(JSONArray response) {
@@ -81,20 +78,24 @@ public class CalendarActivity extends AppCompatActivity {
                 JSONObject training = response.getJSONObject(i);
                 trainingList.add(gson.fromJson(String.valueOf(training), Training.class));
             } catch (JSONException e) {
-                Log.e(TAG,"Error read training");
+                Log.e(TAG, "Error read training");
             }
         }
-        if (allTrainings.size() ==0){
+        if (allTrainings.size() == 0) {
             allTrainings.addAll(trainingList);
-        }else{
+        } else {
             allTrainings.addAll(trainingList);
             populateCalendar(allTrainings);
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void matchCoachWithUser(User user) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+    void init(User user, Context context, GridView gridView, ImageButton ibPrevious, ImageButton ibNext) {
+        this.gridview = gridView;
+        this.previous = ibPrevious;
+        this.next = ibNext;
+        this.context = context;
+        RequestQueue queue = Volley.newRequestQueue(context);
         String url = Connection.url + "/coaches/" + user.getId();
         Log.i(TAG, "Making request on: " + url);
         ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
@@ -109,31 +110,31 @@ public class CalendarActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    private void populateCalendar(List<Training> trainings){
+    private void populateCalendar(List<Training> trainings) {
         EventsCollection.date_collection_arr = new ArrayList<>();
-        for (Training training: trainings){
+        for (Training training : trainings) {
             EventsCollection.date_collection_arr.add(new EventsCollection(
-                training.getStartTime().format(dateFormatter),
-                training.getCustomer().toString(),
-                training.getInfo(),
-                training.getStartTime().format(timeFormatter),
-                training.getEndTime().format(timeFormatter),
-                training.isAccepted()
-                ));
+                    training.getStartTime().format(dateFormatter),
+                    training.getCustomer().toString(),
+                    training.getInfo(),
+                    training.getStartTime().format(timeFormatter),
+                    training.getEndTime().format(timeFormatter),
+                    training.isAccepted()
+            ));
         }
 
 
+//TODO try to settitle
 
-        getSupportActionBar().setTitle("Your calendar");
+//        getSupportActionBar().setTitle("Your calendar");
         cal_month = (GregorianCalendar) GregorianCalendar.getInstance();
         cal_month_copy = (GregorianCalendar) cal_month.clone();
-        calendarAdapter = new CalendarAdapter(this, cal_month, EventsCollection.date_collection_arr);
+        calendarAdapter = new CalendarAdapter((Activity) context, cal_month, EventsCollection.date_collection_arr);
 
-        tv_month = findViewById(R.id.tv_month);
-        tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+//        tv_month. = findViewById(R.id.tv_month);
+        String month_name = (String) android.text.format.DateFormat.format("MMMM yyyy", cal_month);
+        tv_month.set(month_name);
 
-
-        ImageButton previous = findViewById(R.id.ib_prev);
         previous.setOnClickListener(v -> {
             if (cal_month.get(GregorianCalendar.MONTH) == Calendar.MAY && cal_month.get(GregorianCalendar.YEAR) == 2017) {
                 //cal_month.set((cal_month.get(GregorianCalendar.YEAR) - 1), cal_month.getActualMaximum(GregorianCalendar.MONTH), 1);
@@ -141,10 +142,7 @@ public class CalendarActivity extends AppCompatActivity {
                 setPreviousMonth();
                 refreshCalendar();
             }
-
-
         });
-        ImageButton next = findViewById(R.id.Ib_next);
         next.setOnClickListener(v -> {
             if (cal_month.get(GregorianCalendar.MONTH) == Calendar.JUNE && cal_month.get(GregorianCalendar.YEAR) == 2018) {
                 //cal_month.set((cal_month.get(GregorianCalendar.YEAR) + 1), cal_month.getActualMinimum(GregorianCalendar.MONTH), 1);
@@ -153,12 +151,12 @@ public class CalendarActivity extends AppCompatActivity {
                 refreshCalendar();
             }
         });
-        GridView gridview = findViewById(R.id.gv_calendar);
+
         gridview.setAdapter(calendarAdapter);
         gridview.setOnItemClickListener(
                 (parent, v, position, id) -> {
                     String selectedGridDate = CalendarAdapter.day_string.get(position);
-                    ((CalendarAdapter) parent.getAdapter()).getPositionList(selectedGridDate, CalendarActivity.this);
+                    ((CalendarAdapter) parent.getAdapter()).getPositionList(selectedGridDate, (Activity) context);
                 });
     }
 
@@ -183,8 +181,11 @@ public class CalendarActivity extends AppCompatActivity {
     private void refreshCalendar() {
         calendarAdapter.refreshDays();
         calendarAdapter.notifyDataSetChanged();
-        tv_month.setText(android.text.format.DateFormat.format("MMMM yyyy", cal_month));
+        String month_name = (String) android.text.format.DateFormat.format("MMMM yyyy", cal_month);
+        tv_month.set(month_name);
     }
 
-
+    public ObservableField<String> getTv_month() {
+        return tv_month;
+    }
 }

@@ -9,6 +9,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.michal.tim_client.LoginActivity;
 import pl.michal.tim_client.R;
+import pl.michal.tim_client.coach.calendar.CalendarActivity;
+import pl.michal.tim_client.coach.profile.ProfileActivity;
+import pl.michal.tim_client.coach.trainings.CoachTrainingActivity;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.LogoutUtils;
 
@@ -38,12 +41,12 @@ public class MenuCoachActivity extends AppCompatActivity {
     }
 
     private void openCoachProfile() {
-        Intent intent = new Intent(getApplicationContext(), CoachProfileActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
     }
 
     private void openCoachTrainings() {
-        Intent intent = new Intent(getApplicationContext(), CoachTrainingsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), CoachTrainingActivity.class);
         startActivity(intent);
     }
 
@@ -53,7 +56,6 @@ public class MenuCoachActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        //TODO CHECK IF ID IS OK ?!
         LogoutUtils.setOffline(Connection.getUser(), this);
         LogoutUtils.cleanUser();
         Intent intent = new Intent(getApplicationContext(), LoginActivity.class);

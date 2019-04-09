@@ -1,4 +1,4 @@
-package pl.michal.tim_client.coach;
+package pl.michal.tim_client.coach.trainings;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

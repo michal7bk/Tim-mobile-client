@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="pl.michal.tim_client">
+          xmlns:tools="http://schemas.android.com/tools" package="pl.michal.tim_client">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
             android:allowBackup="true"
@@ -8,7 +8,7 @@
             android:label="@string/AppName"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
 
         <activity android:name=".LoginActivity" android:theme="@style/AppTheme.Dark">
             <intent-filter>
@@ -26,9 +26,9 @@
         <activity android:name=".customer.CustomerFindCoachActivity" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".customer.CustomerProposeNewDateActive" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".coach.MenuCoachActivity" android:theme="@style/AppTheme.Dark" />
-        <activity android:name=".coach.CoachProfileActivity" android:theme="@style/AppTheme.Dark"/>
-        <activity android:name=".coach.CoachTrainingsActivity" android:theme="@style/AppTheme.Dark"/>
-        <activity android:name=".coach.CalendarActivity" />
+        <activity android:name=".coach.profile.ProfileActivity"  android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".coach.trainings.CoachTrainingActivity"  android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".coach.calendar.CalendarActivity"/>
     </application>
 
 </manifest>

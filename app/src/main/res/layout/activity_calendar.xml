@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+                name="calendarViewModel"
+                type="pl.michal.tim_client.coach.calendar.CalendarViewModel"/>
+    </data>
 <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+        tools:context =".coach.calendar.CalendarActivity"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -45,8 +53,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:text="@string/January"
                         android:textColor="#4b4a4a"
+                        android:text="@{calendarViewModel.tv_month}"
                         android:textSize="20dip"
                         android:textStyle="bold"/>
                 <TextView
@@ -181,3 +189,4 @@
     </RelativeLayout>
 
 </RelativeLayout>
+</layout>
