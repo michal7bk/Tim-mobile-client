@@ -1,22 +1,17 @@
-package pl.michal.tim_client.customer;
+package pl.michal.tim_client.customer.trainings;
 
 import android.app.ProgressDialog;
+import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import android.widget.*;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -30,6 +25,7 @@ import org.json.JSONObject;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.coach.model.Coach;
 import pl.michal.tim_client.customer.model.Customer;
+import pl.michal.tim_client.customer.trainings.proposeNewDate.ProposeNewDateActivity;
 import pl.michal.tim_client.domain.Training;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
@@ -43,43 +39,45 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
+public class TrainingViewModel extends ViewModel {
 
-    private final String TAG = "CustomerCurrentTrainingsActivity";
 
+    private final String TAG = "TrainingViewModel";
+    private Context context;
     private List<Training> trainings = new ArrayList<>();
 
-    @BindView(R.id.table_layout)
     TableLayout _tableLayout;
-
     private Customer customer;
-    ProgressDialog mProgressBar;
+    ProgressDialog mProgressBar ;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.customer_currenttrainings);
-        ButterKnife.bind(this);
-        matchCustomerWithUser(Connection.getUser());
-        mProgressBar = new ProgressDialog(this);
-        _tableLayout = findViewById(R.id.tableTrainings);
-        _tableLayout.setStretchAllColumns(true);
+     void init(User user,Context context) {
+        this.context = context;
+        String url = Connection.url + "/customers/" + user.getId();
+        RequestQueue queue = Volley.newRequestQueue(context);
+        Log.i(TAG, "Making request on:" + url);
+        ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
+                response -> {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeJsonConverter())
+                            .serializeNulls()
+                            .create();
+                    Log.i(TAG, String.valueOf(response));
+                    customer = gson.fromJson(String.valueOf(response), Customer.class);
+                    Log.i(TAG, "Read customer : " + customer);
+                    getTrainings(customer);
+                },
+                error -> Log.d("Error.Response", String.valueOf(error))
+        );
+        queue.add(getRequest);
     }
 
-    private void startLoadData() {
-        mProgressBar.setCancelable(false);
-        mProgressBar.setMessage("Fetching Trainings..");
-        mProgressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressBar.show();
-        new LoadDataTask().execute(0);
 
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void getTrainings(Customer customer) {
         List<Training> result = new ArrayList<>();
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         String url = Connection.url + "/customers/" + customer.getId() + "/trainings";
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 response -> {
@@ -117,6 +115,16 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
         queue.add(getRequest);
     }
 
+
+    private void startLoadData() {
+        mProgressBar= new ProgressDialog(context);
+        mProgressBar.setCancelable(false);
+        mProgressBar.setMessage("Fetching Trainings..");
+        mProgressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressBar.show();
+        new LoadDataTask().execute(0);
+
+    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void loadData() {
 
@@ -124,16 +132,15 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
         int topRowMargin = 0;
         int rightRowMargin = 0;
         int bottomRowMargin = 0;
-        int textSize = 0, smallTextSize = 0, mediumTextSize = 0;
-
-        textSize = (int) getResources().getDimension(R.dimen.font_size_verysmall);
-        smallTextSize = (int) getResources().getDimension(R.dimen.font_size_small);
-        mediumTextSize = (int) getResources().getDimension(R.dimen.font_size_medium);
+        int textSize = 0, smallTextSize = 0;
+        int mediumTextSize;
+        textSize = (int) context.getResources().getDimension(R.dimen.font_size_verysmall);
+        smallTextSize = (int) context.getResources().getDimension(R.dimen.font_size_small);
+        mediumTextSize = (int) context.getResources().getDimension(R.dimen.font_size_medium);
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm");
         int rows = trainings.size();
-        getSupportActionBar().setTitle("Trainings (" + rows + ") pick to change date");
         TextView textSpacer;
 
         _tableLayout.removeAllViews();
@@ -144,33 +151,34 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
             if (i > -1)
                 row = trainings.get(i);
             else {
-                textSpacer = new TextView(this);
+                textSpacer = new TextView(context);
                 textSpacer.setText("");
-
             }
             // data columns
-            final TextView tv = new TextView(this);
+            final TextView tv = new TextView(context);
             tv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                     TableRow.LayoutParams.WRAP_CONTENT));
 
-            tv.setGravity(Gravity.LEFT);
+
+
+                    tv.setGravity(Gravity.LEFT);
 
             tv.setPadding(5, 15, 0, 15);
             if (i == -1) {
-                tv.setText("Accepted");
+                tv.setText(R.string.textAccepted);
                 tv.setBackgroundColor(Color.parseColor("#f0f0f0"));
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, smallTextSize);
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, mediumTextSize);
             } else {
                 tv.setBackgroundColor(Color.parseColor("#f8f8f8"));
                 tv.setText(String.valueOf(row.accepted));
                 tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             }
 
-            final TextView tv2 = new TextView(this);
+            final TextView tv2 = new TextView(context);
             if (i == -1) {
                 tv2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.WRAP_CONTENT));
-                tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, smallTextSize);
+                tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, mediumTextSize);
             } else {
                 tv2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                         TableRow.LayoutParams.MATCH_PARENT));
@@ -181,7 +189,7 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
 
             tv2.setPadding(5, 15, 0, 15);
             if (i == -1) {
-                tv2.setText("Coach");
+                tv2.setText(R.string.textCoach);
                 tv2.setBackgroundColor(Color.parseColor("#f7f7f7"));
             } else {
                 tv2.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -189,17 +197,17 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
                 tv2.setText(row.coach.toString());
             }
 
-            final LinearLayout layCustomer = new LinearLayout(this);
+            final LinearLayout layCustomer = new LinearLayout(context);
             layCustomer.setOrientation(LinearLayout.VERTICAL);
             layCustomer.setPadding(0, 10, 0, 10);
             layCustomer.setBackgroundColor(Color.parseColor("#f8f8f8"));
 
-            final TextView tv3 = new TextView(this);
+            final TextView tv3 = new TextView(context);
             if (i == -1) {
                 tv3.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.MATCH_PARENT));
                 tv3.setPadding(5, 5, 0, 5);
-                tv3.setTextSize(TypedValue.COMPLEX_UNIT_PX, smallTextSize);
+                tv3.setTextSize(TypedValue.COMPLEX_UNIT_PX, mediumTextSize);
             } else {
                 tv3.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.MATCH_PARENT));
@@ -209,38 +217,39 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
             tv3.setGravity(Gravity.TOP);
 
             if (i == -1) {
-                tv3.setText("Date");
+                tv3.setText(R.string.textDate);
                 tv3.setBackgroundColor(Color.parseColor("#f0f0f0"));
             } else {
                 tv3.setBackgroundColor(Color.parseColor("#f8f8f8"));
                 tv3.setTextColor(Color.parseColor("#000000"));
-                tv3.setTextSize(TypedValue.COMPLEX_UNIT_PX, smallTextSize);
+                tv3.setTextSize(TypedValue.COMPLEX_UNIT_PX, mediumTextSize);
                 tv3.setText(row.startTime.format(formatter));
             }
             layCustomer.addView(tv3);
 
             if (i > -1) {
-                final TextView tv3b = new TextView(this);
+                final TextView tv3b = new TextView(context);
                 tv3b.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                         TableRow.LayoutParams.WRAP_CONTENT));
 
                 tv3b.setGravity(Gravity.RIGHT);
                 tv3b.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-                tv3b.setPadding(5, 1, 0, 5);
+                tv3b.setPadding(50, 1, 50, 5);
                 tv3b.setTextColor(Color.parseColor("#aaaaaa"));
                 tv3b.setBackgroundColor(Color.parseColor("#f8f8f8"));
                 tv3b.setText(row.endTime.format(formatter));
                 layCustomer.addView(tv3b);
             }
 
-            final LinearLayout layAmounts = new LinearLayout(this);
+            final LinearLayout layAmounts = new LinearLayout(context);
             layAmounts.setOrientation(LinearLayout.VERTICAL);
             layAmounts.setGravity(Gravity.RIGHT);
             layAmounts.setPadding(0, 10, 0, 10);
             layAmounts.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                     TableRow.LayoutParams.MATCH_PARENT));
 
-            final TextView tv4 = new TextView(this);
+
+            final TextView tv4 = new TextView(context);
             if (i == -1) {
                 tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.MATCH_PARENT));
@@ -254,9 +263,9 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
             }
             tv4.setGravity(Gravity.RIGHT);
             if (i == -1) {
-                tv4.setText("Information");
+                tv4.setText(R.string.textInformation);
                 tv4.setBackgroundColor(Color.parseColor("#f7f7f7"));
-                tv4.setTextSize(TypedValue.COMPLEX_UNIT_PX, smallTextSize);
+                tv4.setTextSize(TypedValue.COMPLEX_UNIT_PX, mediumTextSize);
             } else {
                 tv4.setBackgroundColor(Color.parseColor("#ffffff"));
                 tv4.setTextColor(Color.parseColor("#000000"));
@@ -266,7 +275,7 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
 
             layAmounts.addView(tv4);
             // add table row
-            final TableRow tr = new TableRow(this);
+            final TableRow tr = new TableRow(context);
             tr.setId(i + 1);
             TableLayout.LayoutParams trParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                     TableLayout.LayoutParams.WRAP_CONTENT);
@@ -279,29 +288,26 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
             tr.addView(layAmounts);
             tr.setTag(i);
             if (i > -1) {
-
                 tr.setOnClickListener(v -> {
                     TableRow tr1 = (TableRow) v;
                     Training training = trainings.get((Integer) tr1.getTag());
                     Long idTraining = training.getId();
-                    Intent intent = new Intent(getApplicationContext(), CustomerProposeNewDateActive.class);
+                    Intent intent = new Intent(context, ProposeNewDateActivity.class);
                     intent.putExtra("idTraining", idTraining);
-                    startActivity(intent);
+                    context.startActivity(intent);
                 });
-
             }
             _tableLayout.addView(tr, trParams);
 
             if (i > -1) {
-
                 // add separator row
-                final TableRow trSep = new TableRow(this);
+                final TableRow trSep = new TableRow(context);
                 TableLayout.LayoutParams trParamsSep = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT,
                         TableLayout.LayoutParams.WRAP_CONTENT);
                 trParamsSep.setMargins(leftRowMargin, topRowMargin, rightRowMargin, bottomRowMargin);
 
                 trSep.setLayoutParams(trParamsSep);
-                TextView tvSep = new TextView(this);
+                TextView tvSep = new TextView(context);
                 TableRow.LayoutParams tvSepLay = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
                         TableRow.LayoutParams.WRAP_CONTENT);
                 tvSepLay.span = 4;
@@ -315,25 +321,8 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void matchCustomerWithUser(User user) {
-        String url = Connection.url + "/customers/" + user.getId();
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Log.i(TAG, "Making request on:" + url);
-        ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
-                response -> {
-                    Gson gson = new GsonBuilder()
-                            .serializeNulls()
-                            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeJsonConverter())
-                            .create();
-                    Log.i(TAG, String.valueOf(response));
-                    customer = gson.fromJson(String.valueOf(response), Customer.class);
-                    Log.i(TAG, "Read customer : " + customer);
-                    getTrainings(customer);
-                },
-                error -> Log.d("Error.Response", String.valueOf(error))
-        );
-        queue.add(getRequest);
+    void initComponent(TableLayout tableLayout) {
+        this._tableLayout=tableLayout;
     }
 
     class LoadDataTask extends AsyncTask<Integer, Integer, String> {
@@ -366,4 +355,12 @@ public class CustomerCurrentTrainingsActivity extends AppCompatActivity {
 
         }
     }
+
+
 }
+
+
+
+
+
+

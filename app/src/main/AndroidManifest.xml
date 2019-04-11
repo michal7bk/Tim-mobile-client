@@ -18,16 +18,17 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SignupActivity" android:theme="@style/AppTheme.Dark" />
-        <activity android:name=".customer.MenuCustomerActivity" android:theme="@style/AppTheme.Dark" />
-        <activity android:name=".customer.CustomerCurrentTrainingsActivity" />
-        <activity android:name=".customer.CustomerNewTrainingsActive" android:theme="@style/AppTheme.Dark"/>
-        <activity android:name=".customer.CustomerProfileActive" android:theme="@style/AppTheme.Dark"/>
-        <activity android:name=".customer.CustomerFindCoachActivity" android:theme="@style/AppTheme.Dark"/>
-        <activity android:name=".customer.CustomerProposeNewDateActive" android:theme="@style/AppTheme.Dark"/>
-        <activity android:name=".coach.MenuCoachActivity" android:theme="@style/AppTheme.Dark" />
-        <activity android:name=".coach.profile.ProfileActivity"  android:theme="@style/AppTheme.Dark"/>
-        <activity android:name=".coach.trainings.CoachTrainingActivity"  android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".SignupActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".customer.MenuCustomerActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".customer.trainings.TrainingsActivity"/>
+        <activity android:name=".customer.newTraining.NewTrainingActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".customer.profile.ProfileActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".customer.findCoach.FindCoachActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".customer.trainings.proposeNewDate.ProposeNewDateActivity"
+                  android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".coach.MenuCoachActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".coach.profile.ProfileActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".coach.trainings.CoachTrainingActivity" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".coach.calendar.CalendarActivity"/>
     </application>
 

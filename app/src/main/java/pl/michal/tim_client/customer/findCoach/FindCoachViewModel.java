@@ -1,13 +1,11 @@
-package pl.michal.tim_client.customer;
+package pl.michal.tim_client.customer.findCoach;
 
+import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ListView;
-import butterknife.ButterKnife;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -28,25 +26,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerFindCoachActivity extends AppCompatActivity {
-    Customer customer;
-    private final String TAG = "CustomerFindCoachActivity";
+public class FindCoachViewModel extends ViewModel {
+    private final String TAG = "FindCoachViewModel";
+    private Context context;
+    private Customer customer;
     private CoachesArrayAdapter coachesArrayAdapter;
     private ListView listView;
     private List<Coach> coaches = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.customer_coaches_list);
-        ButterKnife.bind(this);
-        matchCustomerWithUser(Connection.getUser());
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void getCoaches() {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         String acceptedUrl = Connection.url + "/coaches";
         Log.i(TAG, "Making request on : " + acceptedUrl);
         ArrRequestWithToken getAccepted = new ArrRequestWithToken(Request.Method.GET, acceptedUrl, null,
@@ -73,8 +63,7 @@ public class CustomerFindCoachActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void populateTable(List<Coach> coaches) {
         coachesArrayAdapter = new CoachesArrayAdapter(
-                CustomerFindCoachActivity.this, R.layout.list_item_coaches_list, coaches);
-        listView = findViewById(R.id.listView);
+                context, R.layout.list_item_coaches_list, coaches);
         listView.setAdapter(coachesArrayAdapter);
         listView.setItemsCanFocus(false);
         listView.setOnItemClickListener(
@@ -83,8 +72,9 @@ public class CustomerFindCoachActivity extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void matchCustomerWithUser(User user) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+    void init(User user, Context context) {
+        this.context = context;
+        RequestQueue queue = Volley.newRequestQueue(context);
         String url = Connection.url + "/customers/" + user.getId();
         Log.i(TAG, "Making request on : " + url);
         ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
@@ -101,5 +91,9 @@ public class CustomerFindCoachActivity extends AppCompatActivity {
                 error -> Log.d("Error.Response", String.valueOf(error))
         );
         queue.add(getRequest);
+    }
+
+    public void initComponent(ListView listView) {
+        this.listView = listView;
     }
 }

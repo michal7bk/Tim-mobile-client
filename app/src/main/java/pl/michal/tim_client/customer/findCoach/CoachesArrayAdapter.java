@@ -1,4 +1,4 @@
-package pl.michal.tim_client.customer;
+package pl.michal.tim_client.customer.findCoach;
 
 import android.app.Activity;
 import android.content.Context;

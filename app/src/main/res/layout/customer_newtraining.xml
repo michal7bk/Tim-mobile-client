@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+                name="newTrainingViewModel"
+                type="pl.michal.tim_client.customer.newTraining.NewTrainingViewModel"/>
+    </data>
+<ScrollView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:fitsSystemWindows="true">
@@ -80,3 +87,4 @@
 
     </LinearLayout>
 </ScrollView>
+</layout>

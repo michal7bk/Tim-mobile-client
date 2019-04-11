@@ -1,15 +1,12 @@
-package pl.michal.tim_client.customer;
+package pl.michal.tim_client.customer.profile;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+import android.databinding.ObservableField;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -18,69 +15,49 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import pl.michal.tim_client.R;
-import pl.michal.tim_client.utils.ObjRequestWithToken;
 import pl.michal.tim_client.customer.model.Customer;
 import pl.michal.tim_client.user.User;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.LocalDateTimeJsonConverter;
+import pl.michal.tim_client.utils.ObjRequestWithToken;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomerProfileActive extends AppCompatActivity {
-    private static final String TAG = "CustomerProfileActive";
-    private Customer customer;
+public class ProfileViewModel extends ViewModel {
 
-    @BindView(R.id.input_nameWithSurname)
-    TextView _nameWithSurname;
-    @BindView(R.id.input_completedTrainings)
-    TextView _completedTrainings;
-    @BindView(R.id.input_plannedTrainings)
-    TextView _plannedTrainings;
-    @BindView(R.id.input_uniqueCoaches)
-    TextView _uniqueCoaches;
-    @BindView(R.id.input_email)
-    TextView _email;
-    @BindView(R.id.input_name)
-    TextView _name;
-    @BindView(R.id.input_surname)
-    TextView _surname;
-    @BindView(R.id.input_roles)
-    TextView _roles;
-    @BindView(R.id.button_edit)
-    Button _buttonEdit;
+    private final String TAG = "ProfileViewModel";
 
+    Customer customer;
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.customer_profile);
-        ButterKnife.bind(this);
-        matchCustomerWithUser(Connection.getUser());
-    }
-
+    public ObservableField<String> nameWithSurname =  new ObservableField<>();
+    public ObservableField<String> completedTrainings =  new ObservableField<>();
+    public ObservableField<String> plannedTrainings =  new ObservableField<>();
+    public ObservableField<String> uniqueCoaches =  new ObservableField<>();
+    public ObservableField<String> email =  new ObservableField<>();
+    public ObservableField<String> name =  new ObservableField<>();
+    public ObservableField<String> surname =  new ObservableField<>();
+    public ObservableField<String> roles =  new ObservableField<>();
 
     @SuppressLint("SetTextI18n")
     private void setUpValue(Customer customer) {
 
-        _nameWithSurname.setText(customer.getName() + " " + customer.getSurname());
-        _email.setText(customer.getEmail());
-        _name.setText(customer.getName());
-        _surname.setText(customer.getSurname());
-        _roles.setText(R.string.Customer);
+        nameWithSurname.set(customer.getName() + " " + customer.getSurname());
+        email.set(customer.getEmail());
+        name.set(customer.getName());
+        surname.set(customer.getSurname());
+        roles.set(String.valueOf(R.string.Customer));
     }
 
-    private void setNumberOfCompletedTrainings(Customer customer) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+    private void setNumberOfCompletedTrainings(Customer customer, Context context) {
+        RequestQueue queue = Volley.newRequestQueue(context);
         String url = Connection.url + "/customers/" + customer.getId() + "/planned-trainings";
         Log.i(TAG, "Making request on : " + url);
         ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        _completedTrainings.setText(response.getString("count"));
+                        completedTrainings.set(response.getString("count"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -91,14 +68,14 @@ public class CustomerProfileActive extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    private void setNumberOfPlannedTrainings(Customer customer) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+    private void setNumberOfPlannedTrainings(Customer customer, Context context) {
+        RequestQueue queue = Volley.newRequestQueue(context);
         String url = Connection.url + "/customers/" + customer.getId() + "/completed-trainings";
         Log.i(TAG, "Making request on : " + url);
         ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        _plannedTrainings.setText(response.getString("count"));
+                        plannedTrainings.set(response.getString("count"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -108,14 +85,14 @@ public class CustomerProfileActive extends AppCompatActivity {
         queue.add(getRequest);
     }
 
-    private void setNumberOfUniqueCoaches(Customer customer) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+    private void setNumberOfUniqueCoaches(Customer customer, Context context) {
+        RequestQueue queue = Volley.newRequestQueue(context);
         String url = Connection.url + "/customers/" + customer.getId() + "/unique-coaches";
         Log.i(TAG, "Making request on: " + url);
         ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        _uniqueCoaches.setText(response.getString("count"));
+                        uniqueCoaches.set(response.getString("count"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -126,9 +103,9 @@ public class CustomerProfileActive extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void matchCustomerWithUser(User user) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+    void init(User user, Context context) {
         String url = Connection.url + "/customers/" + user.getId();
+        RequestQueue queue = Volley.newRequestQueue(context);
         Log.i(TAG, "Making request on : " + url);
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
@@ -140,9 +117,9 @@ public class CustomerProfileActive extends AppCompatActivity {
                     customer = gson.fromJson(String.valueOf(response), Customer.class);
                     Log.i(TAG, "Read coach : " + response);
                     setUpValue(customer);
-                    setNumberOfPlannedTrainings(customer);
-                    setNumberOfCompletedTrainings(customer);
-                    setNumberOfUniqueCoaches(customer);
+                    setNumberOfPlannedTrainings(customer, context);
+                    setNumberOfCompletedTrainings(customer, context);
+                    setNumberOfUniqueCoaches(customer, context);
                     Log.i(TAG, "Read customer : " + customer);
                 },
                 error -> Log.d("Error.Response", String.valueOf(error))
@@ -156,5 +133,37 @@ public class CustomerProfileActive extends AppCompatActivity {
             }
         };
         queue.add(getRequest);
+    }
+
+    public ObservableField<String> getNameWithSurname() {
+        return nameWithSurname;
+    }
+
+    public ObservableField<String> getCompletedTrainings() {
+        return completedTrainings;
+    }
+
+    public ObservableField<String> getPlannedTrainings() {
+        return plannedTrainings;
+    }
+
+    public ObservableField<String> getUniqueCoaches() {
+        return uniqueCoaches;
+    }
+
+    public ObservableField<String> getEmail() {
+        return email;
+    }
+
+    public ObservableField<String> getName() {
+        return name;
+    }
+
+    public ObservableField<String> getSurname() {
+        return surname;
+    }
+
+    public ObservableField<String> getRoles() {
+        return roles;
     }
 }

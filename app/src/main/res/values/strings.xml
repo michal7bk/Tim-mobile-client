@@ -61,4 +61,9 @@
     <string name="Training">Training</string>
     <string name="Delete">Delete</string>
     <string name="EventOn">event on</string>
+    <string name="CustomerTrainingsTitle">Your trainings, tap to change date</string>
+    <string name="textAccepted">Accepted</string>
+    <string name="textCoach">Coach</string>
+    <string name="textDate">Date</string>
+    <string name="textInformation">Information</string>
 </resources>

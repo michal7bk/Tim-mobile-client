@@ -9,6 +9,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.michal.tim_client.LoginActivity;
 import pl.michal.tim_client.R;
+import pl.michal.tim_client.customer.findCoach.FindCoachActivity;
+import pl.michal.tim_client.customer.newTraining.NewTrainingActivity;
+import pl.michal.tim_client.customer.profile.ProfileActivity;
+import pl.michal.tim_client.customer.trainings.TrainingsActivity;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.LogoutUtils;
 
@@ -42,22 +46,22 @@ public class MenuCustomerActivity extends AppCompatActivity {
     }
 
     private void newTrainingClick() {
-        Intent intent = new Intent(getApplicationContext(), CustomerNewTrainingsActive.class);
+        Intent intent = new Intent(getApplicationContext(), NewTrainingActivity.class);
         startActivity(intent);
     }
 
     private void currentTrainingsClick() {
-        Intent intent = new Intent(getApplicationContext(), CustomerCurrentTrainingsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), TrainingsActivity.class);
         startActivity(intent);
     }
 
     private void customerProfileClick() {
-        Intent intent = new Intent(getApplicationContext(), CustomerProfileActive.class);
+        Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
         startActivity(intent);
     }
 
     private void findCoach() {
-        Intent intent = new Intent(getApplicationContext(), CustomerFindCoachActivity.class);
+        Intent intent = new Intent(getApplicationContext(), FindCoachActivity.class);
         startActivity(intent);
     }
 
