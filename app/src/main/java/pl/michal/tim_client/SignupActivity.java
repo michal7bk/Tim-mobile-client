@@ -15,7 +15,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pl.michal.tim_client.user.User.Roles;
+import pl.michal.tim_client.domain.User.Roles;
 import pl.michal.tim_client.utils.Connection;
 
 import java.util.HashMap;

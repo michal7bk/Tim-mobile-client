@@ -1,10 +1,10 @@
 package pl.michal.tim_client.utils;
 
-import pl.michal.tim_client.user.User;
+import pl.michal.tim_client.domain.User;
 
 public class Connection {
 
-    private static final String ip = "192.168.43.116";
+    private static final String ip = "10.9.110.149";
     private static final String port = "8080";
     public static final String url = "http://" + ip + ":" + port;
     private static User user;

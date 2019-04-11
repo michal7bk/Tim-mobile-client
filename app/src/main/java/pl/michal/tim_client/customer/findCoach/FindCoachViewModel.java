@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.coach.model.Coach;
 import pl.michal.tim_client.customer.model.Customer;
-import pl.michal.tim_client.user.User;
+import pl.michal.tim_client.domain.User;
 import pl.michal.tim_client.utils.ArrRequestWithToken;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.LocalDateTimeJsonConverter;

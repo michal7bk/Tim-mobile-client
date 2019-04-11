@@ -7,7 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pl.michal.tim_client.user.User;
+import pl.michal.tim_client.domain.User;
 
 import java.util.HashMap;
 import java.util.Map;

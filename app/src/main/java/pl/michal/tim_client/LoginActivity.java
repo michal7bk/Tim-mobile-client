@@ -20,7 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import pl.michal.tim_client.coach.MenuCoachActivity;
 import pl.michal.tim_client.customer.MenuCustomerActivity;
-import pl.michal.tim_client.user.User;
+import pl.michal.tim_client.domain.User;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.ObjRequestWithToken;
 

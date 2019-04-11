@@ -1,4 +1,4 @@
-package pl.michal.tim_client.user;
+package pl.michal.tim_client.domain;
 
 public class User {
     private Long id;
