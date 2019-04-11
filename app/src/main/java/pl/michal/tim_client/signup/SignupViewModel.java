@@ -1,60 +1,39 @@
-package pl.michal.tim_client;
+package pl.michal.tim_client.signup;
 
 import android.app.ProgressDialog;
+import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
-import pl.michal.tim_client.domain.User.Roles;
+import pl.michal.tim_client.R;
+import pl.michal.tim_client.domain.User;
+import pl.michal.tim_client.login.LoginActivity;
 import pl.michal.tim_client.utils.Connection;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SignupActivity extends AppCompatActivity {
-    private static final String TAG = "SignupActivity";
+public class SignupViewModel extends ViewModel {
+    private final String TAG = "SignupViewModel";
+    private Context context;
 
-    @BindView(R.id.input_name)
     EditText _nameText;
-    @BindView(R.id.input_username)
     EditText _emailText;
-    @BindView(R.id.input_password)
     EditText _passwordText;
-    @BindView(R.id.btn_signup)
     Button _signupButton;
-    @BindView(R.id.link_login)
     TextView _loginLink;
-    @BindView(R.id.roles_spinner)
     Spinner _rolesSpiner;
-    @BindView(R.id.input_surname)
     EditText _surnameText;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
-        ButterKnife.bind(this);
-        _signupButton.setOnClickListener(v -> signup());
-
-        _loginLink.setOnClickListener(v -> {
-            finish();
-        });
-        populateSpinner();
-        addListenerOnSpinnerItemSelection();
-    }
-
-
-    private void signup() {
+    void signup() {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
@@ -64,7 +43,7 @@ public class SignupActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
+        final ProgressDialog progressDialog = new ProgressDialog(context,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Creating Account...");
@@ -73,7 +52,7 @@ public class SignupActivity extends AppCompatActivity {
         String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        Roles roles = (Roles) _rolesSpiner.getSelectedItem();
+        User.Roles roles = (User.Roles) _rolesSpiner.getSelectedItem();
         String surname = _surnameText.getText().toString();
 
 
@@ -91,14 +70,12 @@ public class SignupActivity extends AppCompatActivity {
 
     private void onSignupSuccess() {
         _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
-        finish();
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
     }
 
     private void onSignupFailed() {
-        Toast.makeText(getBaseContext(), R.string.LoginFailed, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, R.string.LoginFailed, Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
@@ -111,21 +88,21 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError(getString(R.string.ErrorValidUsername));
+            _nameText.setError(context.getString(R.string.ErrorValidUsername));
             valid = false;
         } else {
             _nameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError(getString(R.string.ErrorValidEmail));
+            _emailText.setError(context.getString(R.string.ErrorValidEmail));
             valid = false;
         } else {
             _emailText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4) {
-            _passwordText.setError(getString(R.string.ErrorValidPassword));
+            _passwordText.setError(context.getString(R.string.ErrorValidPassword));
             valid = false;
         } else {
             _passwordText.setError(null);
@@ -134,18 +111,17 @@ public class SignupActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void populateSpinner() {
-        _rolesSpiner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Roles.values()));
+    void populateSpinner() {
+        _rolesSpiner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, User.Roles.values()));
     }
 
-    private void addListenerOnSpinnerItemSelection() {
-        _rolesSpiner = findViewById(R.id.roles_spinner);
+    void addListenerOnSpinnerItemSelection() {
         _rolesSpiner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
-    private void makeSignupRequest(String name, String email, String password, Roles roles, String surname) {
+    private void makeSignupRequest(String name, String email, String password, User.Roles roles, String surname) {
         String url = Connection.url + "/users/sign-up";
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("name", name);
@@ -157,12 +133,8 @@ public class SignupActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
-                response -> {
-                    Log.d("Response", response.toString());
-                },
-                error -> {
-                    Log.d("Error.Response", String.valueOf(error));
-                }
+                response -> Log.d("Response", response.toString()),
+                error -> Log.d("Error.Response", String.valueOf(error))
         ) {
 
             @Override
@@ -176,6 +148,20 @@ public class SignupActivity extends AppCompatActivity {
         queue.add(postRequest);
     }
 
+    void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void initComponent(EditText nameText, EditText emailText, EditText passwordText, Button signupButton, TextView loginLink, Spinner rolesSpiner, EditText surnameText) {
+        this._nameText = nameText;
+        this._emailText = emailText;
+        this._surnameText = surnameText;
+        this._passwordText = passwordText;
+        this._signupButton = signupButton;
+        this._loginLink = loginLink;
+        this._rolesSpiner = rolesSpiner;
+    }
+
     public class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -187,5 +173,6 @@ public class SignupActivity extends AppCompatActivity {
         }
 
     }
+
 
 }

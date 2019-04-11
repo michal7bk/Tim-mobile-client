@@ -10,7 +10,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".LoginActivity" android:theme="@style/AppTheme.Dark">
+        <activity android:name=".login.LoginActivity" android:theme="@style/AppTheme.Dark">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SignupActivity" android:theme="@style/AppTheme.Dark"/>
+        <activity android:name=".signup.SignupActivity" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".customer.MenuCustomerActivity" android:theme="@style/AppTheme.Dark"/>
         <activity android:name=".customer.trainings.TrainingsActivity"/>
         <activity android:name=".customer.newTraining.NewTrainingActivity" android:theme="@style/AppTheme.Dark"/>

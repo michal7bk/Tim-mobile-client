@@ -7,12 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TableRow;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.michal.tim_client.LoginActivity;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.customer.findCoach.FindCoachActivity;
 import pl.michal.tim_client.customer.newTraining.NewTrainingActivity;
 import pl.michal.tim_client.customer.profile.ProfileActivity;
 import pl.michal.tim_client.customer.trainings.TrainingsActivity;
+import pl.michal.tim_client.login.LoginActivity;
 import pl.michal.tim_client.utils.Connection;
 import pl.michal.tim_client.utils.LogoutUtils;
 

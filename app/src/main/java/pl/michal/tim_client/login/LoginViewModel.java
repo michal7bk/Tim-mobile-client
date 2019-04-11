@@ -1,23 +1,21 @@
-package pl.michal.tim_client;
+package pl.michal.tim_client.login;
 
 import android.app.ProgressDialog;
+import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.android.volley.*;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
+import pl.michal.tim_client.R;
 import pl.michal.tim_client.coach.MenuCoachActivity;
 import pl.michal.tim_client.customer.MenuCustomerActivity;
 import pl.michal.tim_client.domain.User;
@@ -26,39 +24,19 @@ import pl.michal.tim_client.utils.ObjRequestWithToken;
 
 import java.io.UnsupportedEncodingException;
 
-public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
+public class LoginViewModel extends ViewModel {
 
-    @BindView(R.id.input_username)
+    private final String TAG = "LoginViewModel";
+    Context context;
+
     EditText _usernameText;
-    @BindView(R.id.input_password)
     EditText _passwordText;
-    @BindView(R.id.btn_login)
     Button _loginButton;
-    @BindView(R.id.link_signup)
     TextView _signupLink;
+     ProgressDialog progressDialog ;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        ButterKnife.bind(this);
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
-        _signupLink.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-            startActivityForResult(intent, REQUEST_SIGNUP);
-        });
-    }
 
     public void login() {
         Log.d(TAG, "Login");
@@ -70,8 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
+
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
@@ -82,51 +59,34 @@ public class LoginActivity extends AppCompatActivity {
         Connection.setUser(makeLoginRequest(username, password));
 
         new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        //TODO MAKE LOGOUT WITH SET ACTIVE FALSE
-                        if (Connection.getUser().isActive())
-                            onLoginSuccess();
-                        else
-                            onLoginFailed();
-                        progressDialog.dismiss();
-                    }
+                () -> {
+                    if (Connection.getUser().isActive())
+                        onLoginSuccess();
+                    else
+                        onLoginFailed();
+                    progressDialog.dismiss();
                 }, 3000);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(getBaseContext(), R.string.ToastNewAccount, Toast.LENGTH_LONG).show();
-                this.finish();
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
-    }
 
     private void onLoginSuccess() {
         _loginButton.setEnabled(true);
         if (Connection.getUser().getRoles() == User.Roles.CUSTOMER) {
-            Intent intent = new Intent(getApplicationContext(), MenuCustomerActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent(context, MenuCustomerActivity.class);
+            context.startActivity(intent);
         } else if (Connection.getUser().getRoles() == User.Roles.COACH) {
-            Intent intent = new Intent(getApplicationContext(), MenuCoachActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent(context, MenuCoachActivity.class);
+            context.startActivity(intent);
         } else {
             Log.i(TAG, "Any Roles do not match to User.Roles " + Connection.getUser().getRoles().toString());
         }
     }
 
     private void onLoginFailed() {
-        Toast.makeText(getBaseContext(), R.string.ToastIncorrectCredentials, Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-        startActivityForResult(intent, REQUEST_SIGNUP);
-        _loginButton.setEnabled(true);
+        Toast.makeText(context, R.string.ToastIncorrectCredentials, Toast.LENGTH_LONG).show();
+//        Intent intent = new Intent(context, SignupActivity.class);
+//        context.startActivityForResult(intent, REQUEST_SIGNUP);
+//        _loginButton.setEnabled(true);
     }
 
     private boolean validate() {
@@ -136,14 +96,14 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         if (username.isEmpty()) {
-            _usernameText.setError(getString(R.string.ErrorValidUsername));
+            _usernameText.setError(context.getString(R.string.ErrorValidUsername));
             valid = false;
         } else {
             _usernameText.setError(null);
         }
 
         if (password.isEmpty()) {
-            _passwordText.setError(getString(R.string.ErrorValidPassword));
+            _passwordText.setError(context.getString(R.string.ErrorValidPassword));
             valid = false;
         } else {
             _passwordText.setError(null);
@@ -154,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private User makeLoginRequest(String name, String password) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         final User user = new User();
         try {
             JSONObject jsonBody = new JSONObject();
@@ -178,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     },
-                    error -> LoginActivity.this.onBackPressed()) {
+                    error -> Toast.makeText(context, "Login failed", Toast.LENGTH_LONG).show()) {
                 @Override
                 protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
                     try {
@@ -202,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setOnline(User user) {
-        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue queue = Volley.newRequestQueue(context);
         String url = Connection.url + "/users/set-online";
         Log.i(TAG, "Making request on :" + url);
         JSONObject jsonBody = new JSONObject();
@@ -214,12 +174,21 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         ObjRequestWithToken putRequest = new ObjRequestWithToken(Request.Method.PUT, url, jsonBody,
-                response -> {
-                    Log.d(TAG,"Set online ");
-                },
-                error -> Log.e(TAG,"Error. Response from setting online."));
+                response -> Log.d(TAG, "Set online "),
+                error -> Log.e(TAG, "Error. Response from setting online."));
         queue.add(putRequest);
     }
+
+    public void initComponent(EditText usernameText, EditText passwordText, Button loginButton, TextView signupLink) {
+        progressDialog = new ProgressDialog(context,
+                R.style.AppTheme_Dark_Dialog);
+        this._usernameText = usernameText;
+        this._passwordText = passwordText;
+        this._loginButton = loginButton;
+        this._signupLink = signupLink;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 }
-
-
