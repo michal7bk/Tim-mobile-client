@@ -60,6 +60,26 @@
 
     </TableRow>
 
+    <TableRow
+            android:id="@+id/coach_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp">
+
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#ed8404"
+                android:gravity="center"
+                android:padding="32dp"
+                android:text="@string/AddPhoto"
+                android:textColor="#fff" />
+
+
+    </TableRow>
+
     <LinearLayout>
         <TextView
                 android:layout_width="match_parent"

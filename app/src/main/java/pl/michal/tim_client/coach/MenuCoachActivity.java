@@ -9,6 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.michal.tim_client.R;
 import pl.michal.tim_client.coach.calendar.CalendarActivity;
+import pl.michal.tim_client.coach.picture.PictureActivity;
 import pl.michal.tim_client.coach.profile.ProfileActivity;
 import pl.michal.tim_client.coach.trainings.CoachTrainingActivity;
 import pl.michal.tim_client.login.LoginActivity;
@@ -29,6 +30,9 @@ public class MenuCoachActivity extends AppCompatActivity {
     @BindView(R.id.btn_CoachLogout)
     FloatingActionButton _logout;
 
+    @BindView(R.id.coach_picture)
+    TableRow _picture;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,8 @@ public class MenuCoachActivity extends AppCompatActivity {
         _trainings.setOnClickListener(x -> openCoachTrainings());
         _calendar.setOnClickListener(x -> openCalendar());
         _logout.setOnClickListener(x -> logout());
+        _picture.setOnClickListener(x -> openPicture());
+
     }
 
     private void openCoachProfile() {
@@ -52,6 +58,11 @@ public class MenuCoachActivity extends AppCompatActivity {
 
     private void openCalendar() {
         Intent intent = new Intent(getApplicationContext(), CalendarActivity.class);
+        startActivity(intent);
+    }
+
+    private void openPicture() {
+        Intent intent = new Intent(getApplicationContext(), PictureActivity.class);
         startActivity(intent);
     }
 

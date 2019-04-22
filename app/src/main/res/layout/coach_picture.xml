@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+                name="pictureViewModel"
+                type="pl.michal.tim_client.coach.picture.PicutreViewModel"/>
+    </data>
+<LinearLayout
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+    <ImageView
+            android:id="@+id/imgView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    <Button
+            android:id="@+id/buttonLoadPicture"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/TextLoadPicture"
+            android:layout_gravity="left"/>
+    <Button
+            android:id="@+id/buttonSavePicture"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/TextSavePicture"
+            android:layout_gravity="right"/>
+</LinearLayout>
+</layout>

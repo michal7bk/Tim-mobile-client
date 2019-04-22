@@ -66,4 +66,8 @@
     <string name="textCoach">Coach</string>
     <string name="textDate">Date</string>
     <string name="textInformation">Information</string>
+    <string name="AddPhoto">Add your profile photo</string>
+    <string name="TextLoadPicture">Load Picture</string>
+    <string name="TextSavePicture">Save Picture</string>
+    <string name="ToastSavedImage">Your profile image was updated</string>
 </resources>
