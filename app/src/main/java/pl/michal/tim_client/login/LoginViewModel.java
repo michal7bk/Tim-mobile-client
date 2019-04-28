@@ -163,10 +163,11 @@ public class LoginViewModel extends ViewModel {
 
     private void setOnline(User user) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = Connection.url + "/users/set-online";
+        String url = Connection.url + "/users";
         Log.i(TAG, "Making request on :" + url);
         JSONObject jsonBody = new JSONObject();
         try {
+            jsonBody.put("active", true);
             jsonBody.put("roles", user.getRoles());
             jsonBody.put("name", user.getUsername());
             jsonBody.put("id", user.getId());

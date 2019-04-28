@@ -18,10 +18,11 @@ public class LogoutUtils {
     public static void setOffline(User user, Context context) {
         String token = user.getToken();
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = Connection.url + "/users/set-offline";
+        String url = Connection.url + "/users";
         Log.i(TAG, "Making request on :" + url);
         JSONObject jsonBody = new JSONObject();
         try {
+            jsonBody.put("active", false);
             jsonBody.put("roles", user.getRoles());
             jsonBody.put("id", user.getId());
             jsonBody.put("name", user.getUsername());
