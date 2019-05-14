@@ -163,18 +163,9 @@ public class LoginViewModel extends ViewModel {
 
     private void setOnline(User user) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = Connection.url + "/users";
+        String url = Connection.url + "/users/"+ Connection.getUser().getId()+"?status=true";
         Log.i(TAG, "Making request on :" + url);
-        JSONObject jsonBody = new JSONObject();
-        try {
-            jsonBody.put("active", true);
-            jsonBody.put("roles", user.getRoles());
-            jsonBody.put("name", user.getUsername());
-            jsonBody.put("id", user.getId());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        ObjRequestWithToken putRequest = new ObjRequestWithToken(Request.Method.PUT, url, jsonBody,
+        ObjRequestWithToken putRequest = new ObjRequestWithToken(Request.Method.PUT, url, null,
                 response -> Log.d(TAG, "Set online "),
                 error -> Log.e(TAG, "Error. Response from setting online."));
         queue.add(putRequest);

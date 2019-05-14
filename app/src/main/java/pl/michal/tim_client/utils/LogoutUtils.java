@@ -18,19 +18,9 @@ public class LogoutUtils {
     public static void setOffline(User user, Context context) {
         String token = user.getToken();
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = Connection.url + "/users";
+        String url = Connection.url + "/users/" + Connection.getUser().getId()+ "?status=false";
         Log.i(TAG, "Making request on :" + url);
-        JSONObject jsonBody = new JSONObject();
-        try {
-            jsonBody.put("active", false);
-            jsonBody.put("roles", user.getRoles());
-            jsonBody.put("id", user.getId());
-            jsonBody.put("name", user.getUsername());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Log.i(TAG, "logout body : " + jsonBody.toString());
-        ObjRequestWithToken putRequest = new ObjRequestWithToken(Request.Method.PUT, url, jsonBody,
+        ObjRequestWithToken putRequest = new ObjRequestWithToken(Request.Method.PUT, url, null,
                 response -> Log.d("LogoutUtils", ": status set offline "),
                 error -> Log.e(TAG, "error message : " + error)){
             @Override
