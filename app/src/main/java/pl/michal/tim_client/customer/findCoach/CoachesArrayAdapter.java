@@ -71,7 +71,7 @@ public class CoachesArrayAdapter extends ArrayAdapter<Coach> {
 
     private void askForContact(Coach coach) {
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = Connection.url + "/customers/" + Connection.getUser().getId() + "/ask-for-contact?email=" + coach.getEmail();
+        String url = Connection.url + "/customers/" + Connection.getUser().getId() + "/contact?email=" + coach.getEmail();
         Log.i(TAG, "Making request on : " + url);
         ObjRequestWithToken getRequest = new ObjRequestWithToken(Request.Method.GET, url, null,
                 response -> {
